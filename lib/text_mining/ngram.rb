@@ -8,7 +8,8 @@ module TextMining
 
     #
     # todo rozwiązać problem z podobieństwem (redukcja symboli), np. miara Levensteina
-    #
+    # todo podobieństwo wyznaczać dzięki stosunkowi: odległość Levenstein/długość ciągóws
+    # todo wziąć pod uwagę usunięcie znaków interpunkcyjnych itd.
     def initialize target, n = 1, regex = / /
       @target = target
       @prob = []

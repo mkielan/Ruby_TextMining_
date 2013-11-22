@@ -1,4 +1,3 @@
-
 module TextMining
   class Document
 
@@ -10,7 +9,7 @@ module TextMining
       # todo wywołanie metod znajdowania, aby odnaleźć elementy
       # wyłapanie numerów przed datami?
       # szukanie numerów
-      # szukanie jednostek
+      # szukanie jednostek , jednostki daty, i umery w znaczniki
     end
 
     def dates
