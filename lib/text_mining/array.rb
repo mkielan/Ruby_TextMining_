@@ -3,7 +3,7 @@ require 'levenshtein'
 class Array
 
   #
-  # Copare array with others
+  # Copare array with other.
   #
   def compare array
     if array.is_a? Array

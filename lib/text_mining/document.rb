@@ -57,7 +57,9 @@ module TextMining
       [buf, numbers, @document_rgxs]
     end
   end
+
   # może zrobić <num(x, value)/>
+
   #
   # Można szukać jednostek po znalezieniu numerów
   def find_unit

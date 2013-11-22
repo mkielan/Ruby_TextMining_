@@ -11,8 +11,10 @@ module TextMining
       @target = target
     end
 
+    #
+    # Return ngram for given number.
+    #
     def ngrams(n)
-      #@target.split(@options[:regex]).each_cons(n).to_a
       Ngram.new @target, n, @options[:regex]
     end
 

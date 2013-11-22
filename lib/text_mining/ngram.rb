@@ -7,9 +7,7 @@ module TextMining
     attr_accessor :n
 
     #
-    # todo rozwiązać problem z mapowaniem wielu dokumentów testowych
     # todo rozwiązać problem z podobieństwem (redukcja symboli), np. miara Levensteina
-    # todo
     #
     def initialize target, n = 1, regex = / /
       @target = target
@@ -22,16 +20,75 @@ module TextMining
       calculate
     end
 
-    def single_calcuate
-      # dla pojedynczego, w calculate wiele
+    #
+    # Find element at symbols list.
+    #
+    def find element #todo using levenstein
+      if element.length == @n
+        (0..(@symbols.length - 1)).each { |i|
+          return i if ((element.compare @symbols[i]) == true)
+        }
+      end
+
+      nil
     end
 
-    def calculate
-      @freq = Array.new(@symbols.length, 0)
-      tokens = @target.split(@regex)
+    #
+    # Find probs for given element.
+    #
+    def find_prob element
+      if element.is_a? Array
+        (0..@symbols.length-1).each { |s|
+          if element.compare @symbols[s] == true
 
-      tmp = []
+            return @prob[s]
+          end
+        }
+      end
+
+      return 0
+    end
+
+    #
+    # Reload symbols from model
+    #
+    def reload_symbols
+      @symbols = []
+      symbols = @target.split(@regex).each_cons(@n).to_a
+
+      symbols.each { |s|
+        test = find(s)
+        @symbols << s if test.nil?
+      }
+    end
+
+    #
+    # Calculate ngrams for learn documents.
+    #
+    def calculate
       @count = 0
+      @freq = Array.new(@symbols.length, 0)
+
+      if @target.is_a? String
+        single_calcuate @target
+      elsif @target.is_a? Array
+        @target.each { |t|
+          single_calcuate t
+        }
+      end
+
+      # mapping of all the results on probability
+      @prob = @freq
+      @prob = @prob.map! { |x| x.to_f / @count }
+    end
+
+    protected
+    #
+    # Cakculate for single learn document.
+    #
+    def single_calcuate single
+      tokens = single.split(@regex)
+      tmp = []
 
       (0..(tokens.length - 1)).each { |i|
         tmp << tokens[i]
@@ -51,50 +108,6 @@ module TextMining
           @count += 1
         end
       }
-
-      #zmapowanie wszystkich wyników na prawdopodobieństwa
-      @prob = @freq
-      @prob = @prob.map! { |x| x.to_f / @count }
-    end
-
-    #
-    # Find element at symbols list
-    #
-    def find element #todo using levenstein
-      if element.length == @n
-        (0..(@symbols.length - 1)).each { |i|
-          return i if ((element.compare @symbols[i]) == true)
-        }
-      end
-
-      nil
-    end
-
-    #
-    # Symbols from model
-    #
-    def reload_symbols
-      symbols = @target.split(@regex).each_cons(@n).to_a
-
-      @symbols = []
-
-      symbols.each { |s|
-        test = find(s)
-        @symbols << s if test.nil?
-      }
-    end
-
-    def find_prob element
-      if element.is_a? Array
-        (0..@symbols.length-1).each { |s|
-          if element.compare @symbols[s] == true
-
-            return @prob[s]
-          end
-        }
-      end
-
-      return 0
     end
   end
 end
