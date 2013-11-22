@@ -1,6 +1,4 @@
 
-#require '../../lib/tokens/token'
-
 module TextMining
 
     #

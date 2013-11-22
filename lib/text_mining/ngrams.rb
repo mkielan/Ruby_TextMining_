@@ -3,7 +3,9 @@ module TextMining
   class Ngrams
     attr_accessor :options
 
-
+    #
+    # target - do wygenerowania ngram-ów
+    #
     def initialize target, options = { regex: / / }
       @options = options
       @target = target

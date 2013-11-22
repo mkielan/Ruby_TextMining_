@@ -44,6 +44,9 @@ class String
     !(self =~ /^-?[0-9]+[,|.]?[0-9]*$/).nil?
   end
 
+  #
+  # Check if string is unit
+  #
   def is_unit?
     !(self =~ %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}$}).nil?
   end

@@ -1,23 +1,31 @@
 
 module TextMining
   class Document
+
+
     def initialize body
-     @body = body
+      @body = body
+      @document_rgx = '<num(x)/>'
+
+      # todo wywołanie metod znajdowania, aby odnaleźć elementy
+      # wyłapanie numerów przed datami?
+      # szukanie numerów
+      # szukanie jednostek
     end
 
     def dates
 
     end
 
-    def numbers
-      find_numbers
-    end
-
     def to_s
       @body.to_s
     end
 
-    def find_numbers replace=nil
+    #
+    # Find numbers and return array with replaced numbers with id,
+    # array of found numbers, and patern of id.
+    #
+    def find_numbers #replace=nil
       numbers = []
 
       text = @body
@@ -32,7 +40,8 @@ module TextMining
           numbers << partition[1]
           puts 'Unit: ' + partition[2].find_unit.to_s
 
-          buf += "<number(#{number})/>"
+          buf += @document_rgx.gsub('x', number.to_s)
+          number += 1
         else
           buf += partition[1]
         end
@@ -45,10 +54,12 @@ module TextMining
         onwards = !partition[2].empty?
       end
 
-      [buf, numbers, '<!number(index)/>']
+      [buf, numbers, @document_rgxs]
     end
   end
-
+  # może zrobić <num(x, value)/>
+  #
+  # Można szukać jednostek po znalezieniu numerów
   def find_unit
     if not self.empty?
       partition = self.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}[ |.|,|:|;]*}
@@ -60,5 +71,9 @@ module TextMining
         end
       end
     end
+  end
+
+  def find_date
+
   end
 end
