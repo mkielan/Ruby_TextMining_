@@ -11,14 +11,14 @@ require 'text_mining/ngrams'
 
 module TextMining
   class TextMining
+    attr_reader :ngrams
 
-    def initialize source
+    def initialize source, lrn_src
       @source = source
+      @lrn_src = lrn_src
 
     end
 
-    # Przed wszystkim pobrać ciąg testowy i uzyskać ngramy dla przetwarzania
-    #
     # Pobieranie kolejnuych dokumentów:
     # 1. Utworzenie obiektów
     # 2. W trakcie tworzenia obiektów następuje wyciągnięcie ze stringów
@@ -26,6 +26,8 @@ module TextMining
     # 3. Następnie dokumenty są przetwarzane przez metodę processing tej klasy
     # 4. Przetworzony dokument może być zmapowany na formę wyjściową
     def run
+      prepare_ngrams
+
       while row = @source.next
 
         doc = Document.new row[0]
@@ -41,6 +43,21 @@ module TextMining
     end
 
     protected
+
+    #
+    # Preparing n-grams from learn documents.
+    #
+    def prepare_ngrams
+      test_docs = []
+
+      # Reading learn docs from source.
+      while row = @lrn_src.next
+        test_docs << Document.new(row[0])
+      end
+
+      @ngrams = Ngrams.new(test_docs)
+    end
+
     #
     # Processing document specified in the parameter
     # Using ngrams, measure the Levenshtein and regex

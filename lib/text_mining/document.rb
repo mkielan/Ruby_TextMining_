@@ -1,5 +1,7 @@
 module TextMining
   class Document
+    attr_reader :body
+
     def initialize body
       @body = body
       @document_rgx = '<num(x)/>'

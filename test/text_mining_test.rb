@@ -11,7 +11,7 @@ class TextMiningTest < Test::Unit::TestCase
   def setup
     @source = SheetSource.new '../data/EKG_opis.ods'
 
-    @text_mining = TextMining::TextMining.new @source
+    @text_mining = TextMining::TextMining.new @source, @source
   end
 
   # Called after every test method runs. Can be used to tear

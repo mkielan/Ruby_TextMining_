@@ -15,6 +15,10 @@ module TextMining
       @regex = regex
       @n = n
 
+      if !@target.is_a? Array
+        @target = [@target]
+      end
+
       reload_symbols
       calculate
     end
@@ -55,11 +59,19 @@ module TextMining
     #
     def reload_symbols
       @symbols = []
-      symbols = @target.split(@regex).each_cons(@n).to_a
+      #todo rozróżnienie dla dokumentów
 
-      symbols.each { |s|
-        test = find(s)
-        @symbols << s if test.nil?
+      @target.each { |doc|
+        if doc.is_a? Document
+          doc = doc.body
+        end
+        symbols = doc.split(@regex).each_cons(@n).to_a
+        #todo usunięcie znaków przystankowych etc.
+
+        symbols.each { |s|
+          test = find(s)
+          @symbols << s if test.nil?
+        }
       }
     end
 
@@ -70,12 +82,12 @@ module TextMining
       @count = 0
       @freq = Array.new(@symbols.length, 0)
 
-      if @target.is_a? String
-        single_calcuate @target
-      elsif @target.is_a? Array
+      if @target.is_a? Array
         @target.each { |t|
           single_calcuate t
         }
+      else
+        single_calcuate @target
       end
 
       # mapping of all the results on probability
@@ -88,6 +100,8 @@ module TextMining
     # Cakculate for single learn document.
     #
     def single_calcuate single
+      single = single.body if single.is_a? Document
+
       tokens = single.split(@regex)
       tmp = []
 
