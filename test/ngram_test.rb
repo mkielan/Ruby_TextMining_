@@ -10,7 +10,7 @@ class NgramTest < Test::Unit::TestCase
   # to set up fixture information.
   def setup
     @text = 'Major Halbe próbuje nakłonić oskarżonego o kłamstwo partyzanta by pozyskał informacje o zrzucie żołnierzy z Londynu'
-    #@ngram1 = Ngram.new @text, 1
+    @ngram1 = Ngram.new @text, 1
     @ngram2 = Ngram.new @text, 2
     @ngram3 = Ngram.new @text, 3
     @ngram4 = Ngram.new @text, 4
@@ -29,7 +29,7 @@ class NgramTest < Test::Unit::TestCase
   end
 
   def test_reload_symbols
-    #assert_equal @ngram1.symbols.length, 16
+    assert_equal @ngram1.symbols.length, 15
     assert_equal @ngram2.symbols.length, 15
     assert_equal @ngram3.symbols.length, 14
     assert_equal @ngram4.symbols.length, 13

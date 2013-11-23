@@ -1,7 +1,5 @@
 module TextMining
   class Document
-
-
     def initialize body
       @body = body
       @document_rgx = '<num(x)/>'

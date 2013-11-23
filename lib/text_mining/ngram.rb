@@ -7,8 +7,6 @@ module TextMining
     attr_accessor :n
 
     #
-    # todo rozwiązać problem z podobieństwem (redukcja symboli), np. miara Levensteina
-    # todo podobieństwo wyznaczać dzięki stosunkowi: odległość Levenstein/długość ciągóws
     # todo wziąć pod uwagę usunięcie znaków interpunkcyjnych itd.
     def initialize target, n = 1, regex = / /
       @target = target
@@ -24,10 +22,12 @@ module TextMining
     #
     # Find element at symbols list.
     #
-    def find element #todo using levenstein
+    def find element
       if element.length == @n
         (0..(@symbols.length - 1)).each { |i|
           return i if ((element.compare @symbols[i]) == true)
+          return i if (element.cmp_levenshtein(@symbols[i]) == true)
+          #return i if element.weighted_distance(@symbols[i]) <= 1
         }
       end
 

@@ -66,4 +66,12 @@ class StringTest < Test::Unit::TestCase
     assert_equal 'cm/ min'.is_unit?, true
     assert_equal 'cm / min'.is_unit?, true
   end
+
+  def test_weighted_distance
+    assert_equal 'aa'.weighted_distance('aa'), 0
+    assert_equal 'aa'.weighted_distance('aaa'), 0.5
+    assert_equal 'aa'.weighted_distance('ab'), 1
+    assert_equal 'aa'.weighted_distance('aab'), 0.5
+    assert_equal 'aa'.weighted_distance('abc'), 1
+  end
 end
