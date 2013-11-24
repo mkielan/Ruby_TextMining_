@@ -12,7 +12,7 @@ module TextMining
     def initialize body
       @body = body
       @num_rgx = '<num(x)/>'
-      @data_rgx = '<date(x)/>'
+      @data_rgx = '<date/>'
       @unit_rgx = '<unit(x)/>'
 
       find_dates
@@ -93,10 +93,10 @@ module TextMining
 
   #
   # Find dates at text document.
-  # todo
+  #
   def find_dates
     #todo poprawić regex
-    rgx = %r{[0-9]{2}[-|,|.]![0-9]{2}[-|,|.]![0-9]{4}}
+    rgx = %r{([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})}
     @dates = []
     find @dates, @data_rgx, rgx
   end
@@ -121,7 +121,7 @@ module TextMining
       number += 1
     end
 
-    @tr_text = buf if buf.length > 0
+    @tr_body= buf if buf.length > 0
   end
 
   public
