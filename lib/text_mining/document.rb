@@ -35,7 +35,7 @@ module TextMining
       text = @body
       buf = ''
       number = 0
-      while !text.nil?
+      while !text.nil? && !text.empty?
         partition = text.partition /[-|+]?[0-9]+[.|,]?[0-9]*/
 
         #partion[0] - poszukiwanie nazwy
@@ -43,21 +43,22 @@ module TextMining
         if partition[1].is_numeric?
           numbers << partition[1]
 
+          #puts 'Unit: ' + partition[2].find_unit.to_s
+          buf += @num_rgx.gsub('x', number.to_s)
+
           result = find_unit partition[2], number
           if !result.nil?
             units << result[0]
-            partition[2] = result[1]
+            buf += result[1]
+            partition[2] = result[2]
           end
 
-          #puts 'Unit: ' + partition[2].find_unit.to_s
 
-          buf += @num_rgx.gsub('x', number.to_s)
           number += 1
         else
           buf += partition[1]
         end
         #partion[2] - poszukiwanie jednostki
-        buf += partition[2]
 
         text = partition[2]
       end
@@ -81,8 +82,8 @@ module TextMining
         partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}}
         if partition[1].is_unit?
 
-          ts = partition[0] + @unit_rgx.gsub('x', number.to_s) + partition[2]
-          return [partition[1], ts]
+          ts = partition[0] + @unit_rgx.gsub('x', number.to_s)
+          return [partition[1], ts, partition[2]]
           #return partition[1]
         end
       end

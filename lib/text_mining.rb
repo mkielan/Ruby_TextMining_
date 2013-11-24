@@ -27,7 +27,7 @@ module TextMining
     # 4. Przetworzony dokument może być zmapowany na formę wyjściową
     def run
       puts 'Prepare ngrams'
-      prepare_ngrams
+      #prepare_ngrams
       puts 'Ngrams prepared'
 
       puts 'Processing documents'
