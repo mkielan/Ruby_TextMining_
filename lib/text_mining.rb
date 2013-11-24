@@ -60,6 +60,7 @@ module TextMining
     # Using ngrams, measure the Levenshtein and regex
     def processing document
       puts '###'
+      puts document
       puts 'transform body:'
       puts document.tr_body
     end

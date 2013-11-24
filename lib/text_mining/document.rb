@@ -32,7 +32,8 @@ module TextMining
       numbers = []
       units = []
 
-      text = @body
+
+      text = @tr_body.nil? ? @body : @tr_body
       buf = ''
       number = 0
       while !text.nil? && !text.empty?
@@ -94,7 +95,33 @@ module TextMining
   # Find dates at text document.
   # todo
   def find_dates
+    #todo poprawić regex
+    rgx = %r{[0-9]{2}[-|,|.]![0-9]{2}[-|,|.]![0-9]{4}}
+    @dates = []
+    find @dates, @data_rgx, rgx
+  end
 
+  def find array, replace, rgx
+    buf = ''
+    number = 0
+    text = @body
+
+    while !text.nil? and !text.empty?
+      partition = text.partition rgx
+
+      buf += partition[0] if !partition[0].nil?
+      if !partition[1].empty?
+        array << partition[1]
+        buf += replace.gsub 'x', number.to_s
+        #todo próba normalizacji (zunifikowania zapisu) daty
+      end
+      buf += partition[2] if !partition[2].nil?
+
+      text = partition[2]
+      number += 1
+    end
+
+    @tr_text = buf if buf.length > 0
   end
 
   public
