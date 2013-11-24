@@ -6,7 +6,6 @@ module TextMining
     attr_accessor :target
     attr_accessor :n
 
-    #
     # todo wziąć pod uwagę usunięcie znaków interpunkcyjnych itd.
     def initialize target, n = 1, regex = / /
       @target = target
@@ -15,11 +14,13 @@ module TextMining
       @regex = regex
       @n = n
 
-      if !@target.is_a? Array
+      if !@target.is_a?(Array) and !@target.is_a?(SheetSource)
         @target = [@target]
       end
 
+      puts 'reload_symbols'
       reload_symbols
+      puts 'calculate'
       calculate
     end
 
@@ -45,7 +46,6 @@ module TextMining
       if element.is_a? Array
         (0..@symbols.length-1).each { |s|
           if element.compare @symbols[s] == true
-
             return @prob[s]
           end
         }
@@ -59,7 +59,6 @@ module TextMining
     #
     def reload_symbols
       @symbols = []
-      #todo rozróżnienie dla dokumentów
 
       @target.each { |doc|
         if doc.is_a? Document

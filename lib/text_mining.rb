@@ -26,24 +26,21 @@ module TextMining
     # 3. Następnie dokumenty są przetwarzane przez metodę processing tej klasy
     # 4. Przetworzony dokument może być zmapowany na formę wyjściową
     def run
+      puts 'Prepare ngrams'
       prepare_ngrams
+      puts 'Ngrams prepared'
 
+      puts 'Processing documents'
       while row = @source.next
-
         doc = Document.new row[0]
 
-        puts '###'
-        puts doc
-        puts 'Numbers:'
-        puts doc.find_numbers.to_s
-        #row.each { |col|
-        #  puts col.to_s
-        #}
+        processing doc
       end
+
+      puts 'Complete'
     end
 
     protected
-
     #
     # Preparing n-grams from learn documents.
     #
@@ -62,7 +59,9 @@ module TextMining
     # Processing document specified in the parameter
     # Using ngrams, measure the Levenshtein and regex
     def processing document
-
+      puts '###'
+      puts 'transform body:'
+      puts document.tr_body
     end
   end
 end
