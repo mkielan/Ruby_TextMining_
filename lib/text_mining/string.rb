@@ -63,4 +63,8 @@ class String
 
     distance.to_f / delta.to_f
   end
+
+  def split_words
+    self.split(/[ ]+/)
+  end
 end

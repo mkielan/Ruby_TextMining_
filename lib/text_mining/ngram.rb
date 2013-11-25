@@ -18,9 +18,7 @@ module TextMining
         @target = [@target]
       end
 
-      puts 'reload_symbols'
       reload_symbols
-      puts 'calculate'
       calculate
     end
 
@@ -31,8 +29,10 @@ module TextMining
       if element.length == @n
         (0..(@symbols.length - 1)).each { |i|
           return i if ((element.compare @symbols[i]) == true)
-          return i if (element.cmp_levenshtein(@symbols[i]) == true)
-          #return i if element.weighted_distance(@symbols[i]) <= 1
+          begin
+            return i if (element.cmp_levenshtein(@symbols[i]) == true)
+          rescue
+          end
         }
       end
 
@@ -61,16 +61,24 @@ module TextMining
       @symbols = []
 
       @target.each { |doc|
-        if doc.is_a? Document
-          doc = doc.body
-        end
-        symbols = doc.split(@regex).each_cons(@n).to_a
-        #todo usunięcie znaków przystankowych etc.
+        next if doc.nil?
 
-        symbols.each { |s|
-          test = find(s)
-          @symbols << s if test.nil?
-        }
+        begin
+          if doc.is_a? Document
+            doc = doc.body
+          end
+          symbols = doc.split(@regex).each_cons(@n).to_a
+
+          #usunięcie znaków przystankowych etc.
+          symbols.map { |b| b.map { |s| s.gsub!(/\W+/, '') } }
+
+          symbols.each { |s|
+            test = find(s)
+            @symbols << s if test.nil?
+          }
+        rescue NoMethodError
+
+        end
       }
     end
 

@@ -22,10 +22,10 @@ class NgramsTest < Test::Unit::TestCase
   end
 
   def test_ngrams
-    a = @ngram.ngrams(3)
+    a = @ngram.trigram
     puts a.symbols
 
-    b= @ngramDoc.ngrams(3)
+    b= @ngramDoc.trigram
     puts b.symbols
   end
 end

@@ -12,15 +12,11 @@ module TextMining
     def initialize body
       @body = body
       @num_rgx = '<num(x)/>'
-      @data_rgx = '<date/>'
+      @date_rgx = '<date/>'
       @unit_rgx = '<unit(x)/>'
 
       find_dates
       find_numbers_units
-
-      # todo wywołanie metod znajdowania, aby odnaleźć elementy
-
-      # szukanie jednostek , jednostki daty, i umery w znaczniki
     end
 
     protected
@@ -31,7 +27,6 @@ module TextMining
     def find_numbers_units
       numbers = []
       units = []
-
 
       text = @tr_body.nil? ? @body : @tr_body
       buf = ''
@@ -44,7 +39,6 @@ module TextMining
         if partition[1].is_numeric?
           numbers << partition[1]
 
-          #puts 'Unit: ' + partition[2].find_unit.to_s
           buf += @num_rgx.gsub('x', number.to_s)
 
           result = find_unit partition[2], number
@@ -53,8 +47,6 @@ module TextMining
             buf += result[1]
             partition[2] = result[2]
           end
-
-
           number += 1
         else
           buf += partition[1]
@@ -67,7 +59,6 @@ module TextMining
       @numbers = numbers
       @units = units
       @tr_body = buf
-      #[buf, numbers, @document_rgxs]
     end
   end
 
@@ -95,12 +86,15 @@ module TextMining
   # Find dates at text document.
   #
   def find_dates
-    #todo poprawić regex
     rgx = %r{([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})}
     @dates = []
-    find @dates, @data_rgx, rgx
+
+    find @dates, @date_rgx, rgx
   end
 
+  #
+  # Find element at body.
+  #
   def find array, replace, rgx
     buf = ''
     number = 0

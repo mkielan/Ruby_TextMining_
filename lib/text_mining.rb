@@ -16,7 +16,6 @@ module TextMining
     def initialize source, lrn_src
       @source = source
       @lrn_src = lrn_src
-
     end
 
     # Pobieranie kolejnuych dokumentów:
@@ -27,7 +26,7 @@ module TextMining
     # 4. Przetworzony dokument może być zmapowany na formę wyjściową
     def run
       puts 'Prepare ngrams'
-      #prepare_ngrams
+      prepare_ngrams
       puts 'Ngrams prepared'
 
       puts 'Processing documents'
@@ -61,8 +60,34 @@ module TextMining
     def processing document
       puts '###'
       puts document
-      puts 'transform body:'
-      puts document.tr_body
+      #puts 'transform body:'
+      #puts document.tr_body
+
+      return #tymczasowo
+
+      words = document.tr_body.split_words
+
+      #for each n-grams
+      (1..2).each { |n|
+        tmp = []
+        words.each { |x|
+          tmp << x
+          tmp.delete_at 0 if tmp.length > n
+
+          #search n-grams to find
+
+          # znalezienie takiej nki
+          # sprawdzenie czy jest dość często taka konfiguracja
+          # jeśli tak to dodać do tablicy nazw, i dać znacznik w tekście
+          # trzeba sensownie wykorzystać znacznik w tr_body, aby nie model mógł rozróżniać wartości,
+          # poprostu traktował zb jako poszczególny model w przyszłości, podobnie jednostki powinny być rozróżnialne przez model.
+          # typy tj. data i liczby mogą być zastąpione odpowiednim kryptonimiem
+
+          # uni gram może przydać się do usunięcia słów funkcyjnych,
+          # jeśli słowo jest na liście słów funkcyjnych danego języka
+          # i nie zostało zakwalifikowane do grupy to można odjąć je od ciągu jako nieistotne z dużym prawdopodobieństwem
+        }
+      }
     end
   end
 end
