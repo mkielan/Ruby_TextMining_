@@ -67,4 +67,47 @@ class String
   def split_words
     self.split(/[ ]+/)
   end
+
+  #
+  # Types:
+  #  - \D - znak nie będący cyfrą
+  #  - \d - znak cyfra
+  #  - \S - nie biały znak
+  #  - \s - biały znak
+  #  - \w - literta lub cyfra
+  #  - \W - anni litera, ani cyfra
+  # patrz wyrażenia regularne w ruby.
+  #
+  def remove_punctuation intra_word = false
+    type = '\D'
+    punctuation = '[-|.|,|:|\']'
+    rgx = Regexp.new punctuation
+
+    if intra_word
+      (self.split rgx).sum
+    else
+      s = ''
+      tmp = self
+      p = type + punctuation + type if !intra_word
+
+      while !tmp.nil? && !tmp.empty?
+        part = tmp.partition Regexp.new(p)
+
+        s += part[0]
+        s += part[1].gsub rgx, ''
+        tmp = part[2]
+      end
+
+      s.gsub! Regexp.new('^' + punctuation), ''
+      s.gsub! Regexp.new(punctuation + '$'), ''
+
+      s
+    end
+  end
+
+  def remove_punctuation! intra_word = true
+    tmp = self.remove_punctuation intra_word
+    self.clear
+    self.insert 0, tmp
+  end
 end

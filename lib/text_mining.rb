@@ -4,10 +4,19 @@ require 'text_mining/version'
 
 require 'text_mining/array'
 require 'text_mining/string'
-require 'text_mining/sheet_source'
 require 'text_mining/document'
 require 'text_mining/ngram'
 require 'text_mining/ngrams'
+
+require 'text_mining/attachments/sheet_source'
+require 'text_mining/attachments/sheet_destination'
+require 'text_mining/attachments/file_destination'
+
+# Tools
+require 'text_mining/tools/n_gram'
+
+# MapReduce można użyć do określenia, które ciągi użyć jako testujące lub ustalenie zbioru słów funkcyjnych.
+# Przykładowo stopwords mogą być generowane automatycznie na podstawie ciągów, które są różne dla nich
 
 module TextMining
   class TextMining
@@ -25,9 +34,9 @@ module TextMining
     # 3. Następnie dokumenty są przetwarzane przez metodę processing tej klasy
     # 4. Przetworzony dokument może być zmapowany na formę wyjściową
     def run
-      puts 'Prepare ngrams'
-      prepare_ngrams
-      puts 'Ngrams prepared'
+      #puts 'Prepare ngrams'
+      #prepare_ngrams
+      #puts 'Ngrams prepared'
 
       puts 'Processing documents'
       while row = @source.next
@@ -60,8 +69,15 @@ module TextMining
     def processing document
       puts '###'
       puts document
-      #puts 'transform body:'
-      #puts document.tr_body
+      puts '# transform body:'
+      puts document.tr_body
+
+      puts '# dates: '
+      puts document.dates
+      puts '# numbers:'
+      puts document.numbers
+      puts '# units: '
+      puts document.units
 
       return #tymczasowo
 

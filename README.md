@@ -1,6 +1,10 @@
 # TextMining
 
-TODO: Write a gem description
+Text Mining is ruby gem developed during prepare engineering work at Military University of Technology in Warsaw.
+
+Author: Mariusz Kielan
+
+Contact mail: mariusz@kielan.org
 
 ## Installation
 

@@ -23,8 +23,7 @@ class ArrayTest < Test::Unit::TestCase
     a = [1, 2, 3, 3]
     b = [1, 2, 3, 3]
     c = [2, 1, 4, 5]
-
-    d = [1,2]
+    d = [1, 2]
 
     assert_equal a.compare(b), true
     assert_equal a.compare(c), false

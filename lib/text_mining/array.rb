@@ -30,7 +30,7 @@ class Array
     if array.is_a? Array
       if self.length == array.length
         #distances = []
-        distances = 0;
+        distances = 0
 
         (0..self.length-1).each { |i|
           distances += self[i].weighted_distance(array[i])
@@ -44,5 +44,9 @@ class Array
     end
 
     raise 'Excepted array object'
+  end
+
+  def sum
+    self.inject { |sum, x| sum + x }
   end
 end

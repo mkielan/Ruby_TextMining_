@@ -9,9 +9,9 @@ class TextMiningTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @source = SheetSource.new '../data/EKG_opis.ods'
-    @ngram_lrn_src = SheetSource.new '../data/EKG_ngrams_lrn.ods'
-    @text_mining = TextMining::TextMining.new @source, @source
+    @source = Attachments::SheetSource.new '../data/EKG_opis.ods'
+    @ngram_lrn_src = Attachments::SheetSource.new '../data/EKG_ngrams_lrn.ods'
+    @text_mining = TextMining.new @source, @source
   end
 
   # Called after every test method runs. Can be used to tear

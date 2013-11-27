@@ -1,0 +1,57 @@
+require 'test/unit'
+require '../test_text_mining_helper'
+
+include TextMining::Tools
+include TextMining::Attachments
+
+class FileDestinationTest < Test::Unit::TestCase
+
+  # Called before every test method runs. Can be used
+  # to set up fixture information.
+  def setup
+    @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @dest_u = FileDestination.new 'unigram.txt'
+    @dest_d = FileDestination.new 'digram.txt'
+    @dest_t = FileDestination.new 'trigram.txt'
+
+    @unigram = NGram.new 1
+    @digram = NGram.new 2
+    @trigram = NGram.new 3
+
+    doc = 1
+    while row = @source.next[0] #.remove_punctuation!
+      puts 'DocumentID: ' + doc.to_s + '/' + @source.count.to_s
+      doc += 1
+
+      document = TextMining::Document.new row
+
+      #@unigram.add document.tr_body
+      #@digram.add document.tr_body
+      #@trigram.add document.tr_body
+
+      @unigram.add document.body
+      @digram.add document.body
+      @trigram.add document.body
+
+      return if doc > 200
+    end
+  end
+
+  # Called after every test method runs. Can be used to tear
+  # down fixture information.
+
+  def teardown
+    # Do nothing
+  end
+
+  def test_write_ngram
+    puts 'Save Unigram'
+    @dest_u.write(@unigram)
+
+    puts 'Save Digram'
+    @dest_d.write(@digram)
+
+    puts 'Save Trigram'
+    @dest_t.write(@trigram)
+  end
+end

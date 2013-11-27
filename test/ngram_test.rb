@@ -29,6 +29,8 @@ class NgramTest < Test::Unit::TestCase
   end
 
   def test_reload_symbols
+
+
     assert_equal @ngram1.symbols.length, 15
     assert_equal @ngram2.symbols.length, 15
     assert_equal @ngram3.symbols.length, 14

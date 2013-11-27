@@ -1,10 +1,10 @@
 module TextMining
   class Ngram
-    attr_accessor :symbols
-    attr_accessor :prob
-    attr_accessor :freq
+    attr_reader :symbols
+    attr_reader :prob
+    attr_reader :freq
     attr_accessor :target
-    attr_accessor :n
+    attr_accessor :dimension
 
     # todo wziąć pod uwagę usunięcie znaków interpunkcyjnych itd.
     def initialize target, n = 1, regex = / /
@@ -12,7 +12,7 @@ module TextMining
       @prob = []
       @freq = []
       @regex = regex
-      @n = n
+      @dimension = n
 
       if !@target.is_a?(Array) and !@target.is_a?(SheetSource)
         @target = [@target]
@@ -26,11 +26,11 @@ module TextMining
     # Find element at symbols list.
     #
     def find element
-      if element.length == @n
-        (0..(@symbols.length - 1)).each { |i|
-          return i if ((element.compare @symbols[i]) == true)
+      if element.length == @dimension
+        (0..@symbols.length - 1).each { |i|
+          return i if element.compare @symbols[i] == true
           begin
-            return i if (element.cmp_levenshtein(@symbols[i]) == true)
+            return i if element.cmp_levenshtein @symbols[i] == true
           rescue
           end
         }
@@ -51,7 +51,7 @@ module TextMining
         }
       end
 
-      return 0
+      0
     end
 
     #
@@ -67,7 +67,7 @@ module TextMining
           if doc.is_a? Document
             doc = doc.body
           end
-          symbols = doc.split(@regex).each_cons(@n).to_a
+          symbols = doc.split(@regex).each_cons(@dimension).to_a
 
           #usunięcie znaków przystankowych etc.
           symbols.map { |b| b.map { |s| s.gsub!(/\W+/, '') } }
@@ -114,9 +114,9 @@ module TextMining
 
       (0..(tokens.length - 1)).each { |i|
         tmp << tokens[i]
-        tmp.delete_at(0) if tmp.length > @n
+        tmp.delete_at(0) if tmp.length > @dimension
 
-        if tmp.length == @n
+        if tmp.length == @dimension
           #znalezienie takiej n-ki w n-gramie
 
           index = find tmp

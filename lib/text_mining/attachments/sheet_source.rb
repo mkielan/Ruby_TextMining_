@@ -1,19 +1,25 @@
-
 module TextMining
+  module Attachments
 
     #
     # Sheet Source to test
     #
     class SheetSource
-
       attr_accessor :current_nr
+      attr_reader :header
 
-      def initialize path
+      def initialize path, header = nil
         @book = Roo::LibreOffice.new path
 
         @book.default_sheet = @book.sheets[0]
 
-        @current_nr = 0
+        if header.nil?
+          @current_nr = 0
+          @header = 0
+        else
+          @current_nr= header
+          @header = header
+        end
       end
 
       #
@@ -38,7 +44,7 @@ module TextMining
         #puts @current_nr.to_s + "|" + @book.first_row.to_s + "; " +  @book.last_row.to_s
         if @current_nr >= @book.first_row and @current_nr <= @book.last_row
           ret = []
-          #((@book.first_column)..(@book.last_column)).each do |col|
+
           ((@book.first_column)..3).each do |col|
             ret << @book.row(@current_nr)[col - 1]
           end
@@ -46,6 +52,11 @@ module TextMining
           ret
         end
       end
+
+      def count
+        @book.last_row - @header
+      end
     end
+  end
 end
 

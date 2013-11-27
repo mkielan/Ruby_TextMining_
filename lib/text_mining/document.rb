@@ -11,9 +11,9 @@ module TextMining
 
     def initialize body
       @body = body
-      @num_rgx = '<num(x)/>'
-      @date_rgx = '<date/>'
-      @unit_rgx = '<unit(x)/>'
+      @num_rgx = ' <num/> ' #' <num(x)/> '
+      @date_rgx = ' <date/> '
+      @unit_rgx = ' <unit/> ' #' <unit(x)/> '
 
       find_dates
       find_numbers_units
@@ -60,69 +60,69 @@ module TextMining
       @units = units
       @tr_body = buf
     end
-  end
 
-  #
-  # Return two dimensial array with
-  # 1 - found unit
-  # 2 - other text
-  def find_unit text, number
-    if not text.empty?
-      partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}[ |.|,|:|;]*}
+    #
+    # Return two dimensial array with
+    # 1 - found unit
+    # 2 - other text
+    def find_unit text, number
+      if not text.empty?
+        partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}[ |.|,|:|;]*}
 
-      if not partition[1].empty?
-        partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}}
-        if partition[1].is_unit?
+        if not partition[1].empty?
+          partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}}
+          if partition[1].is_unit?
 
-          ts = partition[0] + @unit_rgx.gsub('x', number.to_s)
-          return [partition[1], ts, partition[2]]
-          #return partition[1]
+            ts = partition[0] + @unit_rgx.gsub('x', number.to_s)
+            return [partition[1], ts, partition[2]]
+            #return partition[1]
+          end
         end
       end
     end
-  end
 
-  #
-  # Find dates at text document.
-  #
-  def find_dates
-    rgx = %r{([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})}
-    @dates = []
+    #
+    # Find dates at text document.
+    #
+    def find_dates
+      rgx = %r{([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})}
+      @dates = []
 
-    find @dates, @date_rgx, rgx
-  end
-
-  #
-  # Find element at body.
-  #
-  def find array, replace, rgx
-    buf = ''
-    number = 0
-    text = @body
-
-    while !text.nil? and !text.empty?
-      partition = text.partition rgx
-
-      buf += partition[0] if !partition[0].nil?
-      if !partition[1].empty?
-        array << partition[1]
-        buf += replace.gsub 'x', number.to_s
-        #todo próba normalizacji (zunifikowania zapisu) daty
-      end
-      buf += partition[2] if !partition[2].nil?
-
-      text = partition[2]
-      number += 1
+      find @dates, @date_rgx, rgx
     end
 
-    @tr_body= buf if buf.length > 0
-  end
+    #
+    # Find element at body.
+    #
+    def find array, replace, rgx
+      buf = ''
+      number = 0
+      text = @body
 
-  public
-  #
-  # Override to_s method.
-  #
-  def to_s
-    @body.to_s
+      while !text.nil? and !text.empty?
+        partition = text.partition rgx
+
+        buf += partition[0] if !partition[0].nil?
+        if !partition[1].empty?
+          array << partition[1]
+          buf += replace.gsub 'x', number.to_s
+          #todo próba normalizacji (zunifikowania zapisu) daty
+        end
+        buf += partition[2] if !partition[2].nil?
+
+        text = partition[2]
+        number += 1
+      end
+
+      @tr_body= buf if buf.length > 0
+    end
+
+    public
+    #
+    # Override to_s method.
+    #
+    def to_s
+      @body.to_s
+    end
   end
 end

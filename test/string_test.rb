@@ -74,4 +74,41 @@ class StringTest < Test::Unit::TestCase
     assert_equal 'aa'.weighted_distance('aab'), 0.5
     assert_equal 'aa'.weighted_distance('abc'), 1
   end
+
+  def test_remove_punctuation
+=begin
+    assert_equal 'a-a'.remove_punctuation, 'a-a'
+    assert_equal 'a- a'.remove_punctuation, 'a- a'
+    assert_equal 'a -a'.remove_punctuation, 'a -a'
+    assert_equal 'a - a'.remove_punctuation, 'a  a'
+    assert_equal 'a-a - bc'.remove_punctuation, 'a-a  bc'
+    assert_equal 'a-a -bc'.remove_punctuation, 'a-a -bc'
+=end
+    assert_equal 'a.a . 4.3'.remove_punctuation, 'aa  4.3'
+    assert_equal '.a....a . 4.334.'.remove_punctuation, 'aa  4.334'
+    #assert_equal 'a-a -bc'.remove_punctuation, 'a-a -bc'
+  end
+
+  def test_remove_punctuation!
+
+=begin
+    a = 'a-a'.remove_punctuation
+    assert_equal a, 'a-a'
+
+    b = 'a- a'.remove_punctuation
+    assert_equal b, 'a- a'
+
+    c = 'a -a'.remove_punctuation
+    assert_equal c, 'a -a'
+
+    d = 'a - a'.remove_punctuation
+    assert_equal d, 'a  a'
+
+    e = 'a-a - bc'.remove_punctuation
+    assert_equal e, 'a-a  bc'
+
+    f = 'a-a -bc'.remove_punctuation
+    assert_equal f, 'a-a -bc'
+=end
+  end
 end
