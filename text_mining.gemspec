@@ -22,5 +22,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'roo'
   spec.add_development_dependency 'levenshtein'
+  spec.add_development_dependency 'rinruby'
   spec.add_development_dependency 'yalab-ruby-ods'
 end

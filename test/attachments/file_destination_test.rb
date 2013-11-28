@@ -19,21 +19,21 @@ class FileDestinationTest < Test::Unit::TestCase
     @trigram = NGram.new 3
 
     doc = 1
-    while row = @source.next[0] #.remove_punctuation!
+    while row = @source.next[0]
       puts 'DocumentID: ' + doc.to_s + '/' + @source.count.to_s
       doc += 1
 
       document = TextMining::Document.new row
 
-      #@unigram.add document.tr_body
-      #@digram.add document.tr_body
-      #@trigram.add document.tr_body
+      @unigram.add document
+      @digram.add document
+      @trigram.add document
 
-      @unigram.add document.body
-      @digram.add document.body
-      @trigram.add document.body
+      #@unigram.add document.body
+      #@digram.add document.body
+      #@trigram.add document.body
 
-      return if doc > 200
+      return if doc > 50
     end
   end
 
@@ -46,12 +46,14 @@ class FileDestinationTest < Test::Unit::TestCase
 
   def test_write_ngram
     puts 'Save Unigram'
-    @dest_u.write(@unigram)
+    @dest_u.write @unigram
 
     puts 'Save Digram'
-    @dest_d.write(@digram)
+    @dest_d.write @digram
 
     puts 'Save Trigram'
-    @dest_t.write(@trigram)
+    @dest_t.write @trigram
+
+    puts 'Finish'
   end
 end

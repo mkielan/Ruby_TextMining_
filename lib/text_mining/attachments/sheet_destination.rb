@@ -37,10 +37,10 @@ module TextMining
           }
 
           # write values
-          (0..value.freqs.length - 1).each { |r|
+          (0..value.cardinalities.length - 1).each { |r|
             write 'doc' + (r + 1).to_s, r + 1, col
 
-            freq = value.freqs[r]
+            freq = value.cardinalities[r]
             (0..freq.length - 1).each { |c|
               write(freq[c], r + row + 1, c + col + 1)
             }

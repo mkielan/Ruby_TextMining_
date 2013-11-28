@@ -20,13 +20,13 @@ module TextMining
             }
             file.write(tmp + "\n")
 
-            (0..value.freqs.length - 1).each { |r|
+            (0..value.cardinalities.length - 1).each { |r|
               tmp = "%7s" % ("doc" + (r + 1).to_s)
 
-              freq = value.freqs[r]
-              (0..freq.length - 1).each { |c|
+              cardinality = value.cardinalities[r]
+              (0..cardinality.length - 1).each { |c|
                 length = 3 + value.symbols[c].to_s.length
-                tmp += "%#{length}s" % freq[c].to_s
+                tmp += "%#{length}s" % cardinality[c].to_s
               }
 
               file.write(tmp + "\n")
