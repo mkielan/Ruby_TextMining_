@@ -7,13 +7,9 @@ module TextMining
 
       def initialize path
         @path = path
-
       end
 
       def write value
-        row = 0
-        col = 0
-
         File.open(@path, 'w') do |file|
           if value.is_a? Tools::NGram
             tmp = '       '
@@ -35,7 +31,6 @@ module TextMining
 
               file.write(tmp + "\n")
             }
-
           else
             file.write value
           end

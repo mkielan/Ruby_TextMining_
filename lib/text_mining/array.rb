@@ -37,7 +37,6 @@ class Array
           #distances << Levenshtein.distance(self[i], array[i])
         }
 
-
         return (distances.to_f / array.length.to_f) <= 0.5
         #return distances
       end

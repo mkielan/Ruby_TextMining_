@@ -78,9 +78,9 @@ class String
   #  - \W - anni litera, ani cyfra
   # patrz wyrażenia regularne w ruby.
   #
-  def remove_punctuation intra_word = false
+  def replace_punctuation intra_word = false, replace = ''
     type = '\D'
-    punctuation = '[-|.|,|:|\']'
+    punctuation = '[.|,]' # |-|:|\'
     rgx = Regexp.new punctuation
 
     if intra_word
@@ -94,7 +94,7 @@ class String
         part = tmp.partition Regexp.new(p)
 
         s += part[0]
-        s += part[1].gsub rgx, ''
+        s += part[1].gsub rgx, replace
         tmp = part[2]
       end
 
@@ -103,6 +103,10 @@ class String
 
       s
     end
+  end
+
+  def remove_punctuation intra_word = true
+    replace_punctuation intra_word
   end
 
   def remove_punctuation! intra_word = true

@@ -15,11 +15,23 @@ module TextMining
       @date_rgx = ' <date/> '
       @unit_rgx = ' <unit/> ' #' <unit(x)/> '
 
+      transform
+    end
+
+    protected
+
+    def transform
+      #usunięcie znaków przystankowych
+      chain = '#*#'
+      sub = (@body.replace_punctuation false, chain).split chain
+      sub.map! { |x| x.strip! } #obcięcie ewentualnych pustych znaków
+
+      #todo dokończyć, trzeba w pętli znajdować.
+
       find_dates
       find_numbers_units
     end
 
-    protected
     #
     # Find numbers and return array with replaced numbers with id,
     # array of found numbers, and patern of id.
