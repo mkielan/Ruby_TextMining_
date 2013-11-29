@@ -3,6 +3,7 @@ module TextMining::Tools
     attr_reader :dimension
     attr_reader :symbols
     attr_reader :cardinalities
+    attr_reader :symbol_freqs
 
     def initialize n, regex = / /
       @dimension = n
@@ -77,7 +78,7 @@ module TextMining::Tools
     def find element
       if element.is_a?(Array) && (element.length == @dimension)
         (0..(@symbols.length - 1)).each { |i|
-          return i if element.compare @symbols[i] == true
+          return i if element.compare(@symbols[i]) == true
 
           # można spróbować miary Levensteina
         }

@@ -14,6 +14,7 @@ require 'text_mining/attachments/file_destination'
 
 # Tools
 require 'text_mining/tools/n_gram'
+require 'text_mining/tools/chart_display'
 
 # MapReduce można użyć do określenia, które ciągi użyć jako testujące lub ustalenie zbioru słów funkcyjnych.
 # Przykładowo stopwords mogą być generowane automatycznie na podstawie ciągów, które są różne dla nich

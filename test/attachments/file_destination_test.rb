@@ -33,7 +33,7 @@ class FileDestinationTest < Test::Unit::TestCase
       #@digram.add document.body
       #@trigram.add document.body
 
-      return if doc > 50
+      return if doc > 200
     end
   end
 
@@ -47,13 +47,18 @@ class FileDestinationTest < Test::Unit::TestCase
   def test_write_ngram
     puts 'Save Unigram'
     @dest_u.write @unigram
+    ChartDisplay.display @unigram.symbol_freqs, 'unigramy', 'n-gramy', 'częstość'
 
     puts 'Save Digram'
     @dest_d.write @digram
+    ChartDisplay.display @digram.symbol_freqs, 'digramy', 'n-gramy', 'częstość'
 
     puts 'Save Trigram'
     @dest_t.write @trigram
+    ChartDisplay.display @trigram.symbol_freqs, 'trigramy', 'n-gramy', 'częstość'
 
     puts 'Finish'
+
+    STDIN.readline
   end
 end
