@@ -1,9 +1,9 @@
 module TextMining::Tools
   class NGram
-    attr_reader :dimension
-    attr_reader :symbols
-    attr_reader :cardinalities
-    attr_reader :symbol_freqs
+    attr_reader :dimension #rozmiar
+    attr_reader :symbols #symbole
+    attr_reader :cardinalities #częstość
+    attr_reader :symbol_freqs #częstości znaków
 
     def initialize n, regex = / /
       @dimension = n
@@ -37,6 +37,18 @@ module TextMining::Tools
       end
     end
 
+    # top with freqs[first..to]
+    # range freqs[x1, x2]
+    def freqs
+      freqs = Freqs.new
+
+      (0..@symbols.length - 1).each { |i|
+        freqs << Hash[:symbol, @symbols[i], :freq, @symbol_freqs[i]]
+      }
+
+      freqs.sort! { |a, b| b[:freq] <=> a[:freq] }
+    end
+
     protected
     def single_add doc, cardinality
       doc.downcase! # zmniejszamy wszystkie znaki
@@ -57,7 +69,6 @@ module TextMining::Tools
     end
 
     def calculate_freqs cardinality
-
       diff = cardinality.length - @symbol_card.length
       (1..diff).each { @symbol_card << 0 }
 
@@ -78,8 +89,11 @@ module TextMining::Tools
     def find element
       if element.is_a?(Array) && (element.length == @dimension)
         (0..(@symbols.length - 1)).each { |i|
-          return i if element.compare(@symbols[i]) == true
-
+          begin
+            return i if element.cmp_levenshtein(@symbols[i]) == true
+          rescue
+            return i if element.compare(@symbols[i]) == true
+          end
           # można spróbować miary Levensteina
         }
       end

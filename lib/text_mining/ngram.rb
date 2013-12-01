@@ -28,9 +28,9 @@ module TextMining
     def find element
       if element.length == @dimension
         (0..@symbols.length - 1).each { |i|
-          return i if element.compare @symbols[i] == true
+          #return i if element.compare @symbols[i] == true
           begin
-            return i if element.cmp_levenshtein @symbols[i] == true
+            return i if (element.cmp_levenshtein @symbols[i]) == true
           rescue
           end
         }

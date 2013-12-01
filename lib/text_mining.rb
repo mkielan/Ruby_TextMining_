@@ -13,6 +13,7 @@ require 'text_mining/attachments/sheet_destination'
 require 'text_mining/attachments/file_destination'
 
 # Tools
+require 'text_mining/tools/freqs'
 require 'text_mining/tools/n_gram'
 require 'text_mining/tools/chart_display'
 

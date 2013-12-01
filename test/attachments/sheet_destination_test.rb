@@ -6,7 +6,6 @@ include TextMining::Tools
 include TextMining::Attachments
 
 class SheetDestinationTest < Test::Unit::TestCase
-
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup

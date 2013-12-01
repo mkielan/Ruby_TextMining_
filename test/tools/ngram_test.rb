@@ -9,16 +9,18 @@ class NGramTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-
-    @ngram = NGram.new 1
+    @ngram = NGram.new 2
 
     @src = TextMining::Attachments::SheetSource.new '../../data/EKG_opis.ods'
 
+    x = 1
     while row = @src.next
+      puts x
+      x += 1
       @ngram.add row[0]
-    end
 
-    puts 'finish'
+      break if x > 50
+    end
   end
 
   # Called after every test method runs. Can be used to tear
@@ -28,6 +30,10 @@ class NGramTest < Test::Unit::TestCase
     # Do nothing
   end
 
-  def test_fail
+  def test_freqs
+    top = @ngram.freqs #[0, 60]
+
+    @dest = TextMining::Attachments::FileDestination.new 'top.txt'
+    @dest.write top
   end
 end
