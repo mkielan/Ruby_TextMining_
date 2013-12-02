@@ -14,6 +14,9 @@ module TextMining::Tools
       @regex = regex
     end
 
+    #
+    # Add single document or collection.
+    #
     def add doc
       return if doc.nil?
 
@@ -37,8 +40,10 @@ module TextMining::Tools
       end
     end
 
+    # Return symbols and freqs with order the most frequent to least
+    #
     # top with freqs[first..to]
-    # range freqs[x1, x2]
+    # value range freqs[x1, x2]
     def freqs
       freqs = Freqs.new
 
@@ -49,7 +54,23 @@ module TextMining::Tools
       freqs.sort! { |a, b| b[:freq] <=> a[:freq] }
     end
 
+    #
+    # Return most frequent symbol with value of freq
+    def top
+      count = @symbols.length
+
+      if count > 0
+        part_width = (count.to_f / 3.0).to_int
+        return freqs[0..part_width]
+      end
+
+      nil
+    end
+
     protected
+    #
+    # Add single document.
+    #
     def single_add doc, cardinality
       doc.downcase! # zmniejszamy wszystkie znaki
       symbols = doc.gsub(/[\s]+/, ' ').split(@regex).each_cons(@dimension).to_a
@@ -68,8 +89,11 @@ module TextMining::Tools
       }
     end
 
+    #
+    # Calculate freqs for current state of symbols
     def calculate_freqs cardinality
       diff = cardinality.length - @symbol_card.length
+
       (1..diff).each { @symbol_card << 0 }
 
       #@symbol_freqs = Array.new @symbols.length, 0

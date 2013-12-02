@@ -31,7 +31,7 @@ class NGramTest < Test::Unit::TestCase
   end
 
   def test_freqs
-    top = @ngram.freqs #[0, 60]
+    top = @ngram.top
 
     @dest = TextMining::Attachments::FileDestination.new 'top.txt'
     @dest.write top
