@@ -40,9 +40,18 @@ class ArrayTest < Test::Unit::TestCase
     c = ['ala', 'po co', 'dest', 'doma', 'deko']
     d = ['ale', 'po co', 'test', 'dom', 'deko']
 
-    assert_equal a.cmp_levenshtein(d), [0, 0, 0, 0, 0]
-    assert_equal a.cmp_levenshtein(b), [0, 3, 2, 1, 0]
-    assert_equal a.cmp_levenshtein(c), [1, 0, 1, 1, 0]
-    assert_equal b.cmp_levenshtein(d), [0, 3, 2, 1, 0]
+    assert_equal a.cmp_levenshtein(d), true
+    assert_equal a.cmp_levenshtein(b), false
+    assert_equal a.cmp_levenshtein(c), true
+    assert_equal b.cmp_levenshtein(d), false
+
+    assert_equal ['a'].cmp_levenshtein(['b']), false
+    assert_equal ['ab'].cmp_levenshtein(['ba']), false
+
+    assert_equal ['a'].cmp_levenshtein(['a']), true
+    assert_equal ['ab'].cmp_levenshtein(['ab']), true
+    assert_equal ['dom'].cmp_levenshtein(['domu']), true
+    assert_equal ['przebiegly'].cmp_levenshtein(['przebiegla']), true
+    assert_equal ['przewiegly'].cmp_levenshtein(['przebiegla']), true
   end
 end

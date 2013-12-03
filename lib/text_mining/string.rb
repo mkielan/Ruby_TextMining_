@@ -64,6 +64,16 @@ class String
     distance.to_f / delta.to_f
   end
 
+  #
+  # Checks if the string is similar to another.
+  # It is resistant case sensitive.s
+  #
+  def similar_to other, accept = 0.34
+    distance = Levenshtein.normalized_distance self.downcase, other.downcase
+
+    return distance <= accept
+  end
+
   def split_words
     self.split(/[ ]+/)
   end

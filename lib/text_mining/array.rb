@@ -29,16 +29,12 @@ class Array
   def cmp_levenshtein array
     if array.is_a? Array
       if self.length == array.length
-        #distances = []
-        distances = 0
 
         (0..self.length-1).each { |i|
-          distances += self[i].weighted_distance(array[i])
-          #distances << Levenshtein.distance(self[i], array[i])
+          return false if not self[i].similar_to(array[i])
         }
 
-        return (distances.to_f / array.length.to_f) <= 0.5
-        #return distances
+        return true
       end
     end
 
