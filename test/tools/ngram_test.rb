@@ -9,17 +9,24 @@ class NGramTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @ngram = NGram.new 2
+    @unigram = NGram.new 1
+    @digram = NGram.new 2
+    @trigram = NGram.new 3
 
-    @src = TextMining::Attachments::SheetSource.new '../../data/EKG_opis.ods'
+    @src = TextMining::Attachments::SheetSource.new '../../data/EKG_opis.ods', header = 1
 
-    x = 1
-    while row = @src.next
-      puts x
-      x += 1
-      @ngram.add row[0]
+    doc = 1
+    while row = @src.next[0].remove_punctuation!
+      puts 'DocumentID: ' + doc.to_s + '/' + @src.count.to_s
 
-      break if x > 50
+      doc += 1
+      document = TextMining::Document.new row
+
+      @unigram.add document
+      @digram.add document
+      @trigram.add document
+
+      return if doc > 200
     end
   end
 
@@ -31,9 +38,13 @@ class NGramTest < Test::Unit::TestCase
   end
 
   def test_freqs
-    top = @ngram.top
+    @dest = TextMining::Attachments::FileDestination.new 'top1.txt'
+    @dest.write @unigram.top
 
-    @dest = TextMining::Attachments::FileDestination.new 'top.txt'
-    @dest.write top
+    @dest = TextMining::Attachments::FileDestination.new 'top2.txt'
+    @dest.write @digram.top
+
+    @dest = TextMining::Attachments::FileDestination.new 'top3.txt'
+    @dest.write @trigram.top
   end
 end

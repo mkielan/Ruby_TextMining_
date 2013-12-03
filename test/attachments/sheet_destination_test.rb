@@ -25,7 +25,7 @@ class SheetDestinationTest < Test::Unit::TestCase
       @digram.add row
       @trigram.add row
 
-      return if doc > 50
+      return if doc > 200
     end
   end
 
