@@ -1,9 +1,10 @@
-module TextMining::Tools
+module TextMining
   class NGram
     attr_reader :dimension #rozmiar
     attr_reader :symbols #symbole
     attr_reader :cardinalities #częstość
     attr_reader :symbol_freqs #częstości znaków
+    attr_reader :documents_count
 
     def initialize n, regex = / /
       @dimension = n
@@ -12,6 +13,7 @@ module TextMining::Tools
       @symbol_card = []
       @cardinalities = []
       @regex = regex
+      @documents_count = 0
     end
 
     #
@@ -73,10 +75,10 @@ module TextMining::Tools
     #
     def single_add doc, cardinality
       doc.downcase! # zmniejszamy wszystkie znaki
+      @documents_count += 1
       symbols = doc.gsub(/[\s]+/, ' ').split(@regex).each_cons(@dimension).to_a
 
       symbols.each { |s|
-        #next if s.match /[\s]+/
         index = find s
 
         if index.nil?
@@ -91,19 +93,25 @@ module TextMining::Tools
 
     #
     # Calculate freqs for current state of symbols
+    #
     def calculate_freqs cardinality
       diff = cardinality.length - @symbol_card.length
 
       (1..diff).each { @symbol_card << 0 }
-
-      #@symbol_freqs = Array.new @symbols.length, 0
 
       # for each symbols
       (0..@symbols.length - 1).each { |s|
         @symbol_card[s] += 1 if cardinality[s] > 0
       }
 
-      @symbol_freqs = @symbol_card.map { |f| f.to_f / @cardinalities.length.to_f }
+      @symbol_freqs = @symbol_card.map { |f| f.to_f / @documents_count.to_f }
+    end
+
+    def delete_at i
+      @symbols.delete_at i
+      @symbol_card.delete_at i
+      @symbol_freqs.delete_at i
+      @cardinalities.delete_at i
     end
 
     #
@@ -118,8 +126,41 @@ module TextMining::Tools
           rescue
             return i if element.compare(@symbols[i]) == true
           end
-          # można spróbować miary Levensteina
         }
+      end
+
+      nil
+    end
+
+    #tu przydałby się MapReduce
+    # Reduce symbols containing in input Ngram
+    #
+    def reduce_containing! ngram, deflection = 0.01
+      if ngram.is_a? NGram
+        if ngram.dimension >= self.dimension
+          i = 0
+
+          #sprawdzam, czy któryś z symboli zawiera się w którymś z drugiego ngramu
+          while i < @symbols.length do
+            #sprawdzenie dla symboli z drugiego n-gramu
+            ngram.symbols.each { |symbol|
+              if symbol.order_containing(@symbols[i])
+                index = ngram.find symbol
+
+                if ngram.symbol_freqs[index] >= @symbol_freqs[i] - deflection \
+                  and ngram.symbol_freqs[index] <= @symbol_freqs[i] + deflection
+
+                  delete_at i
+                  next
+                end
+              end
+            }
+
+            i += 1
+          end
+        end
+      else
+        'Excepted NGram class object'
       end
 
       nil

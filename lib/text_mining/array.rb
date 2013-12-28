@@ -41,6 +41,39 @@ class Array
     raise 'Excepted array object'
   end
 
+  #
+  # Check if self contain other array with order
+  #
+  def order_containing array
+    if array.is_a? Array
+      if array.length > 0 and self.length > 0 and array.length <= self.length
+        i = 0
+
+        last_good = self.length - array.length - 1
+        #ustalenie pierwszego wspólnego elementu
+        until array[i] == self[0] or i == last_good do
+          i += 1
+        end
+
+        if i <= last_good
+          (0..array.length - 1).each { |e|
+            return false if array[e] != self[e + i]
+          }
+
+          return true
+        end
+      end
+    else
+      raise 'Excepted Array class object!'
+    end
+
+    false
+  end
+
+  def find_order_containing
+
+  end
+
   def sum
     self.inject { |sum, x| sum + x }
   end

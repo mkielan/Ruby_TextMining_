@@ -5,28 +5,35 @@ require 'text_mining/version'
 require 'text_mining/array'
 require 'text_mining/string'
 require 'text_mining/document'
-require 'text_mining/ngram'
-require 'text_mining/ngrams'
+require 'text_mining/freqs'
+require 'text_mining/n_gram'
+require 'text_mining/n_grams_manager'
 
+# Attachments
 require 'text_mining/attachments/sheet_source'
 require 'text_mining/attachments/sheet_destination'
 require 'text_mining/attachments/file_destination'
 
+# Gui
+require 'text_mining/gui/main'
+
 # Tools
-require 'text_mining/tools/freqs'
-require 'text_mining/tools/n_gram'
-require 'text_mining/tools/chart_display'
+require 'text_mining/helpers/chart_display'
+
 
 # MapReduce można użyć do określenia, które ciągi użyć jako testujące lub ustalenie zbioru słów funkcyjnych.
 # Przykładowo stopwords mogą być generowane automatycznie na podstawie ciągów, które są różne dla nich
-
 module TextMining
+  #include Tools
+
   class TextMining
-    attr_reader :ngrams
+    attr_reader :n_gram_manager
 
     def initialize source, lrn_src
       @source = source
       @lrn_src = lrn_src
+
+      @n_gram_manager = NGramManager.new
     end
 
     # Pobieranie kolejnuych dokumentów:
@@ -62,7 +69,7 @@ module TextMining
         test_docs << Document.new(row[0])
       end
 
-      @ngrams = Ngrams.new(test_docs)
+      @n_gram_manager.add test_docs
     end
 
     #

@@ -15,17 +15,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.3.5, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="levenshtein (v0.2.2, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.5.1, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.0, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rake (v10.1.0, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rinruby (v2.0.3, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="roo (v1.12.2, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="ruby-ole (v1.2.11.7, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="rubyzip (v1.0.0, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="spreadsheet (v0.9.0, RVM: ruby-2.0.0-p247) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="yalab-ruby-ods (v0.0.0, RVM: ruby-2.0.0-p247) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="bundler (v1.3.5, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="gruff (v0.5.1, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="levenshtein-jruby (v0.1.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.5.2, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.1, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rake (v10.1.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rinruby (v2.0.3, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rmagick4j (v0.3.8, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="roo (v1.13.2, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ruby-ole (v1.2.11.7, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rubyzip (v1.0.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="spreadsheet (v0.9.6, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="yalab-ruby-ods (v0.0.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
   </component>
 </module>
 

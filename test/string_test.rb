@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/unit'
 require 'date'
 require_relative '../test/test_text_mining_helper'
@@ -97,13 +99,12 @@ class StringTest < Test::Unit::TestCase
     assert_equal 'to'.similar_to('ta'), false
     assert_equal 'dom'.similar_to('domek'), false
 
-
     assert_equal 'dom'.similar_to('domu'), true
     assert_equal 'rama'.similar_to('ramą'), true
     assert_equal 'bam'.similar_to('bum'), true
     assert_equal 'kolejowy'.similar_to('kolejową'), true
-    assert_equal 'kolejowy'.similar_to('Kolejową'), true
-    assert_equal 'kolejowy'.similar_to('Kolejpwą'), true
+    assert_equal 'kolejowy'.similar_to('Kolejowa'), true
+    assert_equal 'kolejowy'.similar_to('Kolejpwy'), true
   end
 
   def test_remove_punctuation!

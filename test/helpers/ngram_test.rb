@@ -2,7 +2,7 @@ require 'test/unit'
 
 require '../test_text_mining_helper'
 
-include TextMining::Tools
+include TextMining
 
 class NGramTest < Test::Unit::TestCase
 
@@ -32,7 +32,6 @@ class NGramTest < Test::Unit::TestCase
 
   # Called after every test method runs. Can be used to tear
   # down fixture information.
-
   def teardown
     # Do nothing
   end

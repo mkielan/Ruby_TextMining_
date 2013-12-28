@@ -54,4 +54,14 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal ['przebiegly'].cmp_levenshtein(['przebiegla']), true
     assert_equal ['przewiegly'].cmp_levenshtein(['przebiegla']), true
   end
+
+  def test_order_conteining
+    a = [1, 2, 3, 4, 5]
+    b = [2, 3, 4]
+
+    assert_equal a.order_containing(b), true
+    assert_equal a.order_containing([7, 8]), false
+    assert_equal a.order_containing([2, 3, 9]), false
+    assert_equal a.order_containing([1, 9]), false
+  end
 end

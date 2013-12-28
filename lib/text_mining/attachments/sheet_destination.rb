@@ -1,5 +1,5 @@
 require 'spreadsheet'
-require_relative '../tools/n_gram'
+require_relative '../n_gram'
 
 module TextMining
   module Attachments

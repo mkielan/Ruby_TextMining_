@@ -69,9 +69,18 @@ class String
   # It is resistant case sensitive.s
   #
   def similar_to other, accept = 0.34
-    distance = Levenshtein.normalized_distance self.downcase, other.downcase
+    distance = Levenshtein.distance self.downcase, other.downcase
+    normalized_distance = distance.to_f / [self.length, other.length].max.to_f
 
-    return distance <= accept
+    # After crossing to JRuby, gem Levenstein not contein normalized_distance,
+    # but it is distance divided by the size of longest sequence.
+    #
+    # In RubyDOC Levenshtein for Ruby(Matz):
+    #
+    # Returns the Levenshtein distance as a number between 0.0 and 1.0.
+    # It's basically the Levenshtein distance divided by the size of the longest sequence.
+
+    normalized_distance <= accept
   end
 
   def split_words

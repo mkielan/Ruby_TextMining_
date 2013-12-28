@@ -27,7 +27,7 @@ module TextMining
 
       #usunięcie znaków przystankowych
       chain = '#*#'
-      @tr_body.gsub! /[\s]+/, ' '
+      @tr_body.gsub!(/[\s]+/, ' ')
       @parts = (@tr_body.replace_punctuation false, chain).split chain
       @parts.map! { |x| x.strip }
       @tr_body = @parts.sum
@@ -45,7 +45,7 @@ module TextMining
       numbers = []
       text = @tr_body.nil? ? @body : @tr_body
       while !text.nil? && !text.empty?
-        partition = text.partition /[-|+]?[0-9]+[.|,]?[0-9]*/
+        partition = text.partition(/[-|+]?[0-9]+[.|,]?[0-9]*/)
 
         #partion[0] - poszukiwanie nazwy
         buf += partition[0]

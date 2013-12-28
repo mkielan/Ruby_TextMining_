@@ -1,8 +1,10 @@
-require_relative '../tools/n_gram'
+require_relative '../n_gram'
 
 module TextMining::Attachments
+
+  # Helper to save data to file.
   class FileDestination
-    attr_accessor :sheet
+    attr_accessor :path
 
     def initialize path
       @path = path
@@ -10,7 +12,7 @@ module TextMining::Attachments
 
     def write value
       File.open(@path, 'w') do |file|
-        if value.is_a? TextMining::Tools::NGram
+        if value.is_a? TextMining::NGram
           tmp = '          '
 
           # write header
@@ -30,7 +32,7 @@ module TextMining::Attachments
 
             file.write(tmp + "\n")
           }
-        elsif value.is_a? TextMining::Tools::Freqs
+        elsif value.is_a? TextMining::Freqs
           file.write value
         elsif value.is_a? Array
           value.each { |v|
