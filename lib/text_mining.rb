@@ -1,13 +1,13 @@
-require 'roo'
-
 require 'text_mining/version'
 
 require 'text_mining/array'
 require 'text_mining/string'
 require 'text_mining/document'
+require 'text_mining/document_comparer'
 require 'text_mining/freqs'
 require 'text_mining/n_grams'
 require 'text_mining/n_grams_manager'
+require 'text_mining/sequence'
 
 # Attachments
 require 'text_mining/attachments/sheet_source'

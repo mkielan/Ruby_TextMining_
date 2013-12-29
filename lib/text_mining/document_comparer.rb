@@ -4,7 +4,7 @@ module TextMining
   #
   # Comparison of documents
   #
-  class DocumentCompare
+  class DocumentComparer
     
     # Required for access to the n-grams
     attr_accessor :n_grams_manager

@@ -1,4 +1,4 @@
-require_relative '../n_gram'
+require_relative '../n_grams'
 
 module TextMining::Attachments
 

@@ -1,3 +1,5 @@
+require 'set'
+
 module TextMining
 
   #
@@ -7,11 +9,11 @@ module TextMining
     attr_accessor :options
     attr_reader :ngrams_sets
 
-    def initialize n = 3, options = {regex: / /}
+    def initialize n = 4, options = {regex: / /}
       @ngrams_sets = []
       @options = options
 
-      n = 3 if n < 1
+      n = 4 if n < 1
 
       (1..n).each { |i|
         @ngrams_sets << NGrams.new(i, @options[:regex])
@@ -28,10 +30,60 @@ module TextMining
     end
 
     #
-    # Sequence finder
+    # Sequence find
     #
-    def seq_find
-
+    # - <b>treshold</b> - mininmum support value for sequence, default value - 0.4
+    def find_sequence treshold = 0.4
+      bulding_sequences  []
+      sequences = []
+      merging_ngrams = Set.new
+      top_ngrams = []
+      
+      #zebranie topowych ngramów
+      (1..@ngrams_sets.length-1).each { |i|
+        @ngrams_sets[i].reduce_containing!
+        top_ngrams.concat @ngrams_sets[i].top
+      }
+      
+      # przygotowanie startowego zbioru sekwencji 
+      # oraz n-gramów, które dają się połączyć ze sobą
+      top_ngrams.each { |ngram|
+        top_ngrams.each { |ngram2|
+          sequence = Sequence.new ngram
+          if sequence.add_conditionally ngram2
+            merging_ngrams << ngram2
+            bulding_sequences << sequence if sequence.support >= treshold
+          end
+        }
+      }
+      
+      #wyszukiwanie sekwencji n-gramów
+      while bulding_sequences.length == 0
+        tmp_bulding_sequences = []
+        
+        #próba doklejania wybranych (łączących się ze sobą) n-gramów do sekwencji
+        bulding_sequences.each { |seq|
+          added = false
+          
+          merging_ngrams.each { |ngram| 
+            if seq.add_conditionally ngram[:symbol], ngram[:freq]
+              added = true
+              break
+            end
+          }
+          
+          if added
+            #dodawany jeśli support ma conajmniej wartość progową
+            sequences << seq if seq.support >= treshold
+          else
+            tmp_bulding_sequences << seq
+          end
+        }
+        
+        bulding_sequences = tmp_bulding_sequences
+      end
+      
+      sequences
     end
 
     #
