@@ -1,9 +1,13 @@
 module TextMining
-  class NGram
-    attr_reader :dimension #rozmiar
-    attr_reader :symbols #symbole
-    attr_reader :cardinalities #częstość
-    attr_reader :symbol_freqs #częstości znaków
+  
+  #
+  # N-grams with one dimension. 
+  #
+  class NGrams
+    attr_reader :dimension      # length of n-grams
+    attr_reader :symbols        # collection of ngrams
+    attr_reader :cardinalities  # cardinality of ngrams
+    attr_reader :symbol_freqs   # freqs of ngrams
     attr_reader :documents_count
 
     def initialize n, regex = / /
@@ -135,20 +139,20 @@ module TextMining
     #tu przydałby się MapReduce
     # Reduce symbols containing in input Ngram
     #
-    def reduce_containing! ngram, deflection = 0.01
-      if ngram.is_a? NGram
-        if ngram.dimension >= self.dimension
+    def reduce_containing! ngrams, deflection = 0.01
+      if ngrams.is_a? NGrams
+        if ngrams.dimension >= self.dimension
           i = 0
 
           #sprawdzam, czy któryś z symboli zawiera się w którymś z drugiego ngramu
           while i < @symbols.length do
             #sprawdzenie dla symboli z drugiego n-gramu
-            ngram.symbols.each { |symbol|
+            ngrams.symbols.each { |symbol|
               if symbol.order_containing(@symbols[i])
-                index = ngram.find symbol
+                index = ngrams.find symbol
 
-                if ngram.symbol_freqs[index] >= @symbol_freqs[i] - deflection \
-                  and ngram.symbol_freqs[index] <= @symbol_freqs[i] + deflection
+                if ngrams.symbol_freqs[index] >= @symbol_freqs[i] - deflection \
+                  and ngrams.symbol_freqs[index] <= @symbol_freqs[i] + deflection
 
                   delete_at i
                   next

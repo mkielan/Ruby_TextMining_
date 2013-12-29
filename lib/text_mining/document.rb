@@ -90,7 +90,6 @@ module TextMining
 
             ts = partition[0] + @unit_rgx.gsub('x', number.to_s)
             return [partition[1], ts, partition[2]]
-            #return partition[1]
           end
         end
       end

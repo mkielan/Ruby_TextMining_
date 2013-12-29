@@ -6,7 +6,7 @@ require 'text_mining/array'
 require 'text_mining/string'
 require 'text_mining/document'
 require 'text_mining/freqs'
-require 'text_mining/n_gram'
+require 'text_mining/n_grams'
 require 'text_mining/n_grams_manager'
 
 # Attachments

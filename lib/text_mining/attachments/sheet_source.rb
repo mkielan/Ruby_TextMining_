@@ -41,7 +41,6 @@ module TextMining
       # Read current row/line.
       #
       def current
-        #puts @current_nr.to_s + "|" + @book.first_row.to_s + "; " +  @book.last_row.to_s
         if @current_nr >= @book.first_row and @current_nr <= @book.last_row
           ret = []
 

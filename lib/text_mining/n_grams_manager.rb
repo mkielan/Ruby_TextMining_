@@ -5,16 +5,16 @@ module TextMining
   #
   class NGramsManager
     attr_accessor :options
-    attr_reader :ngrams
+    attr_reader :ngrams_sets
 
     def initialize n = 3, options = {regex: / /}
-      @ngrams = []
+      @ngrams_sets = []
       @options = options
 
       n = 3 if n < 1
 
       (1..n).each { |i|
-        @ngrams << NGram.new(i, @options[:regex])
+        @ngrams_sets << NGrams.new(i, @options[:regex])
       }
     end
 
@@ -22,8 +22,8 @@ module TextMining
     # Add document to each ngrams
     #
     def add doc
-      @ngrams.each { |ngram|
-        ngram.add doc
+      @ngrams_sets.each { |ngrams|
+        ngrams.add doc
       }
     end
 
@@ -38,10 +38,10 @@ module TextMining
     # Reduce ngrams when longer contain shorter 
     # with similar probability.
     def reduce #dobre miejsce na MapReduce
-      return if @ngrams.length < 2
+      return if @ngrams_sets.length < 2
 
-      (1..@ngrams.count - 1).each { |i|
-        @ngrams[i].reduce_containing!(@ngrams[i + 1])
+      (1..@ngrams_sets.count - 1).each { |i|
+        @ngrams_sets[i].reduce_containing!(@ngrams_sets[i + 1])
       }
     end
   end

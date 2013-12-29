@@ -17,6 +17,7 @@ module TextMining
     # albo przyjąć że będzie tablica dokumentów do porównania
     # porównywanie dokonywane będzie na podstawie uzyskanych sekwencji
     def compare doc, doc2
+      #TODO
       false
     end
   end
