@@ -13,18 +13,18 @@ class SheetDestinationTest < Test::Unit::TestCase
     @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
     @dest = SheetDestination.new '../../data/dest.ods'
 
-    @unigram = NGram.new 1
-    @digram = NGram.new 2
-    @trigram = NGram.new 3
+    @unigrams = NGram.new 1
+    @bigrams = NGram.new 2
+    @trigrams = NGram.new 3
 
     doc = 1
     while row = @source.next[0].remove_punctuation!
       puts 'DocumentID: ' + doc.to_s + '/' + @source.count.to_s
 
       doc += 1
-      @unigram.add row
-      @digram.add row
-      @trigram.add row
+      @unigrams.add row
+      @bigrams.add row
+      @trigrams.add row
 
       return if doc > 200
     end
@@ -40,14 +40,14 @@ class SheetDestinationTest < Test::Unit::TestCase
   def test_write_ngram
     @dest.switch_sheet(name = 'unigram')
     puts 'Save Unigram'
-    @dest.write(@unigram)
+    @dest.write(@unigrams)
 
     @dest.switch_sheet(name = 'digram')
     puts 'Save Digram'
-    @dest.write(@digram)
+    @dest.write(@bigrams)
 
     @dest.switch_sheet(name = 'trigram')
     puts 'Save Trigram'
-    @dest.write(@trigram)
+    @dest.write(@trigrams)
   end
 end

@@ -12,7 +12,7 @@ module TextMining::Attachments
 
     def write value
       File.open(@path, 'w') do |file|
-        if value.is_a? TextMining::NGram
+        if value.is_a? TextMining::NGrams
           tmp = '          '
 
           # write header

@@ -1,49 +1,59 @@
 require 'test/unit'
 
-require '../test_text_mining_helper'
+require '../test/test_text_mining_helper'
 
 include TextMining
+include TextMining::Attachments
+
+
 
 class NGramsTest < Test::Unit::TestCase
+  prepare_test_results_dir NGramsTest
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @unigram = NGrams.new 1
-    @digram = NGrams.new 2
-    @trigram = NGram.snew 3
+    @unigrams = NGrams.new 1
+    @bigrams = NGrams.new 2
+    @trigrams = NGrams.new 3
 
-    @src = TextMining::Attachments::SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @src = SheetSource.new '../data/EKG_opis.ods', header = 1
 
     doc = 1
     while row = @src.next[0].remove_punctuation!
       puts 'DocumentID: ' + doc.to_s + '/' + @src.count.to_s
 
       doc += 1
-      document = TextMining::Document.new row
+      document = Document.new row
 
-      @unigram.add document
-      @digram.add document
-      @trigram.add document
+      @unigrams.add document
+      @bigrams.add document
+      @trigrams.add document
 
       return if doc > 200
     end
   end
 
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-  def teardown
-    # Do nothing
+  def test_general
+    _test_freqs
+    _test_reduce_containing
   end
 
-  def test_freqs
-    @dest = TextMining::Attachments::FileDestination.new 'top1.txt'
-    @dest.write @unigram.top
+  def _test_freqs
+    @dest = FileDestination.new $test_results_dir + '/top1.txt'
+    @dest.write @unigrams.top
 
-    @dest = TextMining::Attachments::FileDestination.new 'top2.txt'
-    @dest.write @digram.top
+    @dest = FileDestination.new $test_results_dir + '/top2.txt'
+    @dest.write @bigrams.top
 
-    @dest = TextMining::Attachments::FileDestination.new 'top3.txt'
-    @dest.write @trigram.top
+    @dest = FileDestination.new $test_results_dir + '/top3.txt'
+    @dest.write @trigrams.top
+  end
+
+  def _test_reduce_containing
+    @trigrams.reduce_containing! @bigrams
+
+    @dest = FileDestination.new $test_results_dir + '/top3_after_reduce.txt'
+    @dest.write @trigrams.top
   end
 end

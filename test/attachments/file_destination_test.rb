@@ -14,9 +14,9 @@ class FileDestinationTest < Test::Unit::TestCase
     @dest_d = FileDestination.new 'digram.txt'
     @dest_t = FileDestination.new 'trigram.txt'
 
-    @unigram = NGram.new 1
-    @digram = NGram.new 2
-    @trigram = NGram.new 3
+    @unigrams = NGram.new 1
+    @bigrams = NGram.new 2
+    @trigrams = NGram.new 3
 
     doc = 1
     while row = @source.next[0]
@@ -25,9 +25,9 @@ class FileDestinationTest < Test::Unit::TestCase
 
       document = TextMining::Document.new row
 
-      @unigram.add document
-      @digram.add document
-      @trigram.add document
+      @unigrams.add document
+      @bigrams.add document
+      @trigrams.add document
 
       #@unigram.add document.body
       #@digram.add document.body
@@ -46,16 +46,16 @@ class FileDestinationTest < Test::Unit::TestCase
 
   def test_write_ngram
     puts 'Save Unigram'
-    @dest_u.write @unigram
-    ChartDisplay.display @unigram.symbol_freqs, 'unigramy', 'n-gramy', 'częstość'
+    @dest_u.write @unigrams
+    ChartDisplay.display @unigrams.symbol_freqs, 'unigramy', 'n-gramy', 'częstość'
 
     puts 'Save Digram'
-    @dest_d.write @digram
-    ChartDisplay.display @digram.symbol_freqs, 'digramy', 'n-gramy', 'częstość'
+    @dest_d.write @bigrams
+    ChartDisplay.display @bigrams.symbol_freqs, 'digramy', 'n-gramy', 'częstość'
 
     puts 'Save Trigram'
-    @dest_t.write @trigram
-    ChartDisplay.display @trigram.symbol_freqs, 'trigramy', 'n-gramy', 'częstość'
+    @dest_t.write @trigrams
+    ChartDisplay.display @trigrams.symbol_freqs, 'trigramy', 'n-gramy', 'częstość'
 
     puts 'Finish'
 

@@ -9,6 +9,8 @@ class NGramManagerTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
+    prepare_test_results_dir
+
     @manager = TextMining::NGramsManager.new
     @src = TextMining::Attachments::SheetSource.new '../data/EKG_opis.ods', header = 1
 
