@@ -32,6 +32,8 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal b.compare(c), false
     assert_equal d.compare(c), false
     assert_equal a.compare(a), true
+
+    assert_raise(ArgumentError) {a.compare('a') }
   end
 
   def test_cmp_levenstein
@@ -44,6 +46,7 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal a.cmp_levenshtein(b), false
     assert_equal a.cmp_levenshtein(c), true
     assert_equal b.cmp_levenshtein(d), false
+    assert_raise(ArgumentError) {a.cmp_levenshtein('a') }
 
     assert_equal ['a'].cmp_levenshtein(['b']), false
     assert_equal ['ab'].cmp_levenshtein(['ba']), false
@@ -66,5 +69,15 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal a.order_containing([7, 8]), false
     assert_equal a.order_containing([2, 3, 9]), false
     assert_equal a.order_containing([1, 9]), false
+    assert_equal a.order_containing([4, 5]), true
+    assert_equal b.order_containing([2, 3]), true
+
+    assert_raise(ArgumentError) {a.order_containing('a') }
+  end
+
+  def test_sum
+    a = [1, 2, 3, 4, 5]
+
+    assert_equal a.sum, 15
   end
 end

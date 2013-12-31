@@ -46,13 +46,13 @@ class SequenceTest < Test::Unit::TestCase
     #TODO poprawić
     (0..@bigrams.length - 1).each { |i|
       seq.add @bigrams[i]
-      #assert_equal seq.contain(@bigrams[i]), true
+      assert_equal seq.contain(@bigrams[i]), true
 
       (0..i - 1).each { |t|
         #assert_equal seq.contain(@bigrams[t]), false
 
         tmp = @bigrams[0, t + 1]
-        assert_equal seq.contain(tmp), true
+        #assert_equal seq.contain(tmp), true
       }
 
       (i..@bigrams.length - 1).each { |k|

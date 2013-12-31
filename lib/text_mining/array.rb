@@ -20,7 +20,7 @@ class Array
       return false
     end
 
-    raise 'Excepted array object'
+    raise ArgumentError, 'Excepted array object'
   end
 
   #
@@ -38,7 +38,7 @@ class Array
       end
     end
 
-    raise 'Excepted array object'
+    raise ArgumentError, 'Excepted array object'
   end
 
   #
@@ -49,7 +49,8 @@ class Array
       if array.length > 0 and self.length > 0 and array.length <= self.length
         i = 0
 
-        last_good = self.length - array.length - 1
+        last_good = self.length - array.length
+
         #ustalenie pierwszego wspólnego elementu
         until array[0] == self[i] or i == last_good or i >= self.length do
           i += 1
@@ -64,7 +65,7 @@ class Array
         end
       end
     else
-      raise 'Excepted Array class object!'
+      raise ArgumentError, 'Excepted Array class object!'
     end
 
     false
