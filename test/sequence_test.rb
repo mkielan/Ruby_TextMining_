@@ -43,20 +43,19 @@ class SequenceTest < Test::Unit::TestCase
 
   def test_contain
     seq = Sequence.new
-    #TODO poprawić
+
     (0..@bigrams.length - 1).each { |i|
       seq.add @bigrams[i]
-      assert_equal seq.contain(@bigrams[i]), true
 
       (0..i - 1).each { |t|
-        #assert_equal seq.contain(@bigrams[t]), false
+        assert_equal seq.contain(@bigrams[t]), true
 
         tmp = @bigrams[0, t + 1]
-        #assert_equal seq.contain(tmp), true
+        assert_equal seq.contain(tmp), true
       }
 
-      (i..@bigrams.length - 1).each { |k|
-        #assert_equal seq.contain(@bigrams[k]), false
+      (i + 1..@bigrams.length - 1).each { |k|
+        assert_equal seq.contain(@bigrams[k]), false
       }
     }
   end

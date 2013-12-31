@@ -34,7 +34,7 @@ module TextMining
     #
     # - <b>treshold</b> - mininmum support value for sequence, default value - 0.4
     def find_sequence treshold = 0.4
-      bulding_sequences  []
+      bulding_sequences = []
       sequences = []
       merging_ngrams = Set.new
       top_ngrams = []

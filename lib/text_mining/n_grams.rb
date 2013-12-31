@@ -84,7 +84,7 @@ module TextMining
     def single_add doc, cardinality
       doc.downcase! # zmniejszamy wszystkie znaki
       @documents_count += 1
-      symbols = split_ngram doc, @regex, @dimension
+      symbols = NGrams.split_ngram doc, @regex, @dimension
 
       symbols.each { |s|
         index = find s
