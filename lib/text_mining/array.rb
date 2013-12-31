@@ -51,11 +51,11 @@ class Array
 
         last_good = self.length - array.length - 1
         #ustalenie pierwszego wspólnego elementu
-        until array[i] == self[0] or i == last_good do
+        until array[0] == self[i] or i == last_good or i >= self.length do
           i += 1
         end
 
-        if i <= last_good
+        if i <= last_good or array.length == 1
           (0..array.length - 1).each { |e|
             return false if array[e] != self[e + i]
           }

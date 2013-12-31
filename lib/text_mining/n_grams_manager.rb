@@ -50,7 +50,7 @@ module TextMining
       top_ngrams.each { |ngram|
         top_ngrams.each { |ngram2|
           sequence = Sequence.new ngram
-          if sequence.add_conditionally ngram2
+          if sequence.add ngram2
             merging_ngrams << ngram2
             bulding_sequences << sequence if sequence.support >= treshold
           end
@@ -66,7 +66,7 @@ module TextMining
           added = false
           
           merging_ngrams.each { |ngram| 
-            if seq.add_conditionally ngram[:symbol], ngram[:freq]
+            if seq.add ngram[:symbol], ngram[:freq]
               added = true
               break
             end

@@ -22,7 +22,7 @@ module TextMining::Attachments
           file.write(tmp + "\n")
 
           (0..value.cardinalities.length - 1).each { |r|
-            tmp = "%7s" % ('doc' + (r + 1).to_s)
+            tmp = '%7s' % ('doc' + (r + 1).to_s)
 
             cardinality = value.cardinalities[r]
             (0..cardinality.length - 1).each { |c|

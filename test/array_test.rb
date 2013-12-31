@@ -59,6 +59,9 @@ class ArrayTest < Test::Unit::TestCase
     a = [1, 2, 3, 4, 5]
     b = [2, 3, 4]
 
+    assert_equal [2].order_containing([1]), false
+    assert_equal [].order_containing([1]), false
+    assert_equal [1].order_containing([1]), true
     assert_equal a.order_containing(b), true
     assert_equal a.order_containing([7, 8]), false
     assert_equal a.order_containing([2, 3, 9]), false
