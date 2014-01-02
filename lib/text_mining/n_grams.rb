@@ -149,8 +149,22 @@ module TextMining
           i = 0
 
           #sprawdzam, czy któryś z symboli zawiera się w którymś z drugiego ngramu
-          while i < @symbols.length do
+          while i < (@symbols.length - 1) and @symbols.length == 0 do
             #sprawdzenie dla symboli z drugiego n-gramu
+            ngrams.symbols.length.times { |j|
+              if ngrams.symbols[j].order_containing(@symbols[i])
+
+                if ngrams.symbol_freqs[j] >= @symbol_freqs[i] - deflection \
+                  and ngrams.symbol_freqs[j] <= @symbol_freqs[i] + deflection
+                  puts "delete #{@symbols[i]} support(#{@symbol_freqs[i]}), because in #{ngrams.symbols[j]} support(#{ngrams.symbol_freqs[j]}"
+
+                  delete_at i
+                  break if @symbols.length == 0
+                  next
+                end
+              end
+            }
+=begin
             ngrams.symbols.each { |symbol|
               if symbol.order_containing(@symbols[i])
                 index = ngrams.find symbol
@@ -163,7 +177,7 @@ module TextMining
                 end
               end
             }
-
+=end
             i += 1
           end
         end

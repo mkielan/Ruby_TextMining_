@@ -3,7 +3,7 @@ require 'set'
 module TextMining
 
   #
-  # N=grams manager to using many n-grams at the same time.
+  # N-grams manager to using many n-grams at the same time.
   #
   class NGramsManager
     attr_accessor :options
@@ -21,12 +21,16 @@ module TextMining
     end
 
     #
-    # Add document to each ngrams
+    # Add document to each n-grams
     #
     def add doc
+      return false if doc.nil?
+
       @ngrams_sets.each { |ngrams|
         ngrams.add doc
       }
+
+      true
     end
 
     #
@@ -39,7 +43,7 @@ module TextMining
       merging_ngrams = Set.new
       top_ngrams = []
       
-      #zebranie topowych ngramów
+      #zebranie topowych ngramów, trzeba poprawić aby pierw zrobić topy, a potem redukcje (aktualnie zawsze będą usunięte te krótsze ponieważ znajdą się w tych dłuższych)
       (1..@ngrams_sets.length-1).each { |i|
         @ngrams_sets[i].reduce_containing!
         top_ngrams.concat @ngrams_sets[i].top
@@ -89,12 +93,26 @@ module TextMining
     #
     # Reduce ngrams when longer contain shorter 
     # with similar probability.
+    # TODO do in on TOPSelements, but need save all elements, because n the future when wiil be add documents, we have to full info, because tops can change
     def reduce #dobre miejsce na MapReduce
       return if @ngrams_sets.length < 2
 
       (1..@ngrams_sets.count - 1).each { |i|
         @ngrams_sets[i].reduce_containing!(@ngrams_sets[i + 1])
       }
+    end
+
+    #
+    # Reduce irrelevant n-grams (no tops) for document (to compare with sequence)
+    #
+    def reduce_irrelevant document
+      if document.is_a? Document
+
+        #TODO
+
+      else
+        raise ArgumentError, 'Excepted Document Class Object'
+      end
     end
   end
 end
