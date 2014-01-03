@@ -5,10 +5,11 @@ module TextMining
   #
   class NGrams
     attr_reader :dimension      # length of n-grams
-    attr_reader :symbols        # collection of ngrams
-    attr_reader :cardinalities  # cardinality of ngrams
-    attr_reader :symbol_freqs   # freqs of ngrams
-    attr_reader :documents_count
+
+    #attr_reader :symbols        # collection of ngrams
+    #attr_reader :cardinalities  # cardinality of ngrams
+    #attr_reader :symbol_freqs   # freqs of ngrams
+    #attr_reader :documents_count
 
     def initialize n, regex = / /
       @dimension = n
@@ -62,6 +63,7 @@ module TextMining
 
     #
     # Return most frequent symbol with value of freq
+    #
     def top
       count = @symbols.length
 
@@ -164,20 +166,7 @@ module TextMining
                 end
               end
             }
-=begin
-            ngrams.symbols.each { |symbol|
-              if symbol.order_containing(@symbols[i])
-                index = ngrams.find symbol
 
-                if ngrams.symbol_freqs[index] >= @symbol_freqs[i] - deflection \
-                  and ngrams.symbol_freqs[index] <= @symbol_freqs[i] + deflection
-
-                  delete_at i
-                  next
-                end
-              end
-            }
-=end
             i += 1
           end
         end

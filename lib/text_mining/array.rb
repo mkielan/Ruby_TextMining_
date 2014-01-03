@@ -71,9 +71,9 @@ class Array
     false
   end
 
-  def find_order_containing
+  #def find_order_containing
 
-  end
+  #end
 
   def sum
     self.inject { |sum, x| sum + x }
