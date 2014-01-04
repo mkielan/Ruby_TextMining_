@@ -1,17 +1,14 @@
 
 module TextMining
   attr_reader :symbols
-  attr_reader :cardinalities  # cardinality of ngrams
-  attr_reader :symbol_freqs
-  attr_reader :symbol_card
+  attr_accessor :freq
+  attr_accessor :symbol_card
 
   class NGram
-
-    def initialize
-      @symbols = []
-      @cardinalities = []
-      @symbol_freqs = []
-      @symbol_card = []
+    def initialize symbols
+      @symbols = symbols
+      @freq = 0
+      @symbol_card = 0
     end
   end
 end

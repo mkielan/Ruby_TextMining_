@@ -5,13 +5,9 @@ require '../test/test_text_mining_helper'
 include TextMining
 include TextMining::Attachments
 
-
-
 class NGramsTest < Test::Unit::TestCase
   prepare_test_results_dir NGramsTest
 
-  # Called before every test method runs. Can be used
-  # to set up fixture information.
   def setup
     @unigrams = NGrams.new 1
     @bigrams = NGrams.new 2
@@ -30,16 +26,11 @@ class NGramsTest < Test::Unit::TestCase
       @bigrams.add document
       @trigrams.add document
 
-      return if doc > 200
+      return if doc > 100
     end
   end
 
   def test_general
-    _test_freqs
-    _test_reduce_containing
-  end
-
-  def _test_freqs
     @dest = FileDestination.new $test_results_dir + '/top1.txt'
     @dest.write @unigrams.top
 
@@ -48,12 +39,12 @@ class NGramsTest < Test::Unit::TestCase
 
     @dest = FileDestination.new $test_results_dir + '/top3.txt'
     @dest.write @trigrams.top
-  end
 
-  def _test_reduce_containing
-    @trigrams.reduce_containing! @bigrams
 
-    @dest = FileDestination.new $test_results_dir + '/top3_after_reduce.txt'
-    @dest.write @trigrams.top
+    puts 'reduce test'
+    @dest = FileDestination.new $test_results_dir + '/top2_after_reduce_with3.txt'
+
+    @bigrams.reduce_containing! @trigrams
+    @dest.write @bigrams.top
   end
 end

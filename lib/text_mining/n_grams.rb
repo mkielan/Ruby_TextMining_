@@ -3,20 +3,12 @@ module TextMining
   #
   # N-grams with one dimension. 
   #
-  class NGrams
+  class NGrams < Array
     attr_reader :dimension      # length of n-grams
-
-    #attr_reader :symbols        # collection of ngrams
-    #attr_reader :cardinalities  # cardinality of ngrams
-    #attr_reader :symbol_freqs   # freqs of ngrams
-    #attr_reader :documents_count
+    attr_reader :documents_count
 
     def initialize n, regex = / /
       @dimension = n
-      @symbols = []
-      @symbol_freqs = []
-      @symbol_card = []
-      @cardinalities = []
       @regex = regex
       @documents_count = 0
     end
@@ -32,8 +24,7 @@ module TextMining
           add d
         }
       else
-        cardinality = Array.new(@symbols.length, 0)
-        @cardinalities << cardinality
+        cardinality = Array.new(self.length, 0)
 
         if doc.is_a? TextMining::Document
           doc.parts.each { |p|
@@ -52,20 +43,20 @@ module TextMining
     # top with freqs[first..to]
     # value range freqs[x1, x2]
     def freqs
-      freqs = Freqs.new
+      ret = Freqs.new
 
-      (0..@symbols.length - 1).each { |i|
-        freqs << Hash[:symbol, @symbols[i], :freq, @symbol_freqs[i]]
+      (0..length - 1).each { |i|
+        ret << Hash[:symbol, self[i].symbols, :freq, self[i].freq]
       }
 
-      freqs.sort! { |a, b| b[:freq] <=> a[:freq] }
+      ret.sort! { |a, b| b[:freq] <=> a[:freq] }
     end
 
     #
     # Return most frequent symbol with value of freq
     #
     def top
-      count = @symbols.length
+      count = self.length
 
       if count > 0
         part_width = (count.to_f / 3.0).to_int
@@ -76,7 +67,7 @@ module TextMining
     end
 
     def self.split_ngram doc, regex, dimension
-      doc.gsub(/[\s]+/, ' ').split(regex).each_cons(dimension).to_a
+      doc.downcase.gsub(/[\s]+/, ' ').split(regex).each_cons(dimension).to_a
     end
 
     protected
@@ -84,20 +75,18 @@ module TextMining
     # Add single document.
     #
     def single_add doc, cardinality
-      doc.downcase! # zmniejszamy wszystkie znaki
       @documents_count += 1
-      symbols = NGrams.split_ngram doc, @regex, @dimension
 
-      symbols.each { |s|
+      NGrams.split_ngram(doc, @regex, @dimension).each { |s|
         index = find s
 
         if index.nil?
-          @symbols << s
-          @cardinalities.map! { |f| f << 0 }
-          index = @symbols.length - 1
-        end
+          self << NGram.new(s)
 
-        cardinality[index] += 1
+          cardinality << 1
+        else
+          cardinality[index] += 1
+        end
       }
     end
 
@@ -105,23 +94,12 @@ module TextMining
     # Calculate freqs for current state of symbols
     #
     def calculate_freqs cardinality
-      diff = cardinality.length - @symbol_card.length
-
-      (1..diff).each { @symbol_card << 0 }
-
       # for each symbols
-      (0..@symbols.length - 1).each { |s|
-        @symbol_card[s] += 1 if cardinality[s] > 0
+      (0..self.length - 1).each { |s|
+        self[s].symbol_card += 1 if cardinality[s] > 0
       }
 
-      @symbol_freqs = @symbol_card.map { |f| f.to_f / @documents_count.to_f }
-    end
-
-    def delete_at i
-      @symbols.delete_at i
-      @symbol_card.delete_at i
-      @symbol_freqs.delete_at i
-      @cardinalities.delete_at i
+      self.map { |f| f.freq = f.symbol_card.to_f / @documents_count.to_f }
     end
 
     #
@@ -129,12 +107,12 @@ module TextMining
     #
     public
     def find element
-      if element.is_a?(Array) && (element.length == @dimension)
-        (0..(@symbols.length - 1)).each { |i|
+      if element.is_a?(Array) && (element.length == @dimension) && self.length > 0
+        (0..(self.length - 1)).each { |i|
           begin
-            return i if element.cmp_levenshtein(@symbols[i]) == true
+            return i if element.cmp_levenshtein(self[i].symbols) == true
           rescue
-            return i if element.compare(@symbols[i]) == true
+            return i if element.compare(self[i].symbols) == true
           end
         }
       end
@@ -151,17 +129,17 @@ module TextMining
           i = 0
 
           #sprawdzam, czy któryś z symboli zawiera się w którymś z drugiego ngramu
-          while i < (@symbols.length - 1) and @symbols.length == 0 do
+          while i < (self.length - 1) and self.length == 0 do
             #sprawdzenie dla symboli z drugiego n-gramu
-            ngrams.symbols.length.times { |j|
-              if ngrams.symbols[j].order_containing(@symbols[i])
+            ngrams.length.times { |j|
+              if self[i].symbols.order_containing(self[i].symbols)
 
-                if ngrams.symbol_freqs[j] >= @symbol_freqs[i] - deflection \
-                  and ngrams.symbol_freqs[j] <= @symbol_freqs[i] + deflection
-                  puts "delete #{@symbols[i]} support(#{@symbol_freqs[i]}), because in #{ngrams.symbols[j]} support(#{ngrams.symbol_freqs[j]}"
+                if ngrams[j].freq >= self[i].freq - deflection \
+                  and ngrams[j].freq <= self[i].freq + deflection
+                  puts "delete #{self[i].symbols} support(#{self[i].freq}), because in #{ngrams[j].symbols} support(#{ngrams[j].symbol_freqs}"
 
                   delete_at i
-                  break if @symbols.length == 0
+                  break if self.length == 0
                   next
                 end
               end
@@ -171,7 +149,7 @@ module TextMining
           end
         end
       else
-        'Excepted NGram class object'
+        raise 'Excepted NGram class object'
       end
 
       nil
