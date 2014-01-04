@@ -21,7 +21,7 @@ class MainTest < Test::Unit::TestCase
 
   def test_run
     while true
-
+      sleep 1
     end
   end
 end
