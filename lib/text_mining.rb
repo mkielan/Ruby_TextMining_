@@ -16,9 +16,10 @@ require 'text_mining/attachments/sheet_destination'
 require 'text_mining/attachments/file_destination'
 
 # Gui
-require 'text_mining/gui/models/document_model'
 require 'text_mining/gui/main'
 require 'text_mining/gui/document_view'
+require 'text_mining/gui/models/document_model'
+require 'text_mining/gui/models/document_list_model'
 
 # Tools
 require 'text_mining/helpers/chart_display'
