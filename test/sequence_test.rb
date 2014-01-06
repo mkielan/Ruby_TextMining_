@@ -77,6 +77,10 @@ class SequenceTest < Test::Unit::TestCase
       sum += @bigrams_support[i]
 
       assert_equal seq.support, sum / (i + 1)
+      if i < @bigrams.length - 1
+        supp = (sum + @bigrams_support[i + 1]) / (i + 2)
+        assert_equal seq.expanded_support(@bigrams[i + 1]), supp
+      end
     }
   end
 
@@ -164,7 +168,7 @@ class SequenceTest < Test::Unit::TestCase
 
     seq.add @bigrams[3]
     assert_equal seq.length, 3
-    assert_equal seq.elements[1], @bigrams[1]
+    assert_equal seq.elements[1], @bigrams[0]
 
   end
 end

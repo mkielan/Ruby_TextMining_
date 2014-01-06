@@ -4,6 +4,10 @@ module TextMining
   # Sequence of the elements (ngrams) with support recount.
   #
   class Sequence
+    protected
+    attr_writer :elements
+
+    public
     attr_reader :elements
     attr_reader :support
     
@@ -87,8 +91,40 @@ module TextMining
     def length
       @elements.length
     end
-    
+
+    def expanded_support ngram
+      if ngram.is_a? NGram
+        sum = ngram.freq
+        @elements.each { |i| sum += i.freq}
+
+        @support = sum.to_f / (length + 1).to_f
+      else
+        raise(ArgumentError, ': ngram should be object of NGram Class')
+      end
+    end
+
+    def clone
+      seq = Sequence.new
+
+      seq.elements = self.elements.clone
+      seq
+    end
+
+    def dup
+      #TODO
+      super.dup
+    end
+
+    def to_write
+      a = '['
+      @elements.each { |e| a += e.symbols.to_s }
+      a += ']'
+
+      a
+    end
+
     private
+
     #
     # Recount support for sequence. 
     # Based on elements support.
@@ -109,9 +145,14 @@ module TextMining
       if which == :begin
         other = @elements.first.symbols
         element = ngram.symbols
+        return false if other.order_containing element
       else
         element = @elements.last.symbols
         other = ngram.symbols
+
+        if element.order_containing other
+          return false
+        end
       end
 
       return false if element == other
@@ -128,7 +169,7 @@ module TextMining
         }
 
         if !last_element.nil?
-          #idx = element.length - last_element- 1
+
           (last_element..element.length - 1).each { |i|
             return false if other[i - last_element] != element[i]
           }

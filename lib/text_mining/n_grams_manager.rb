@@ -52,12 +52,16 @@ module TextMining
 
       # przygotowanie startowego zbioru sekwencji 
       # oraz n-gramów, które dają się połączyć ze sobą
-      @top_ngrams.each { |ngram|
-        @top_ngrams.each { |ngram2|
-          sequence = Sequence.new ngram
-          if sequence.add ngram2
-            merging_ngrams << ngram2
-            bulding_sequences << sequence if sequence.support >= treshold
+      @top_ngrams.length.times { |ngram|
+        (ngram + 1..@top_ngrams.length - 1).each { |ngram2|
+          if @top_ngrams[ngram] != @top_ngrams[ngram2]
+            sequence = Sequence.new @top_ngrams[ngram]
+            if sequence.expanded_support(@top_ngrams[ngram2]) >= treshold\
+            and sequence.add @top_ngrams[ngram2]
+
+              merging_ngrams << @top_ngrams[ngram2]
+              bulding_sequences << sequence #if sequence.support >= treshold
+            end
           end
         }
       }
@@ -70,18 +74,22 @@ module TextMining
         bulding_sequences.each { |seq|
           added = false
           
-          merging_ngrams.each { |ngram| 
-            if seq.add ngram
+          merging_ngrams.each { |ngram|
+            seq_clone = seq.clone
+            if seq_clone.expanded_support(ngram) >= treshold and seq_clone.add ngram
               added = true
+
+              tmp_bulding_sequences << seq_clone
+
               break
             end
           }
           
           if added
-            tmp_bulding_sequences << seq
+            #tmp_bulding_sequences << seq #if seq.support >= treshold
           else
             #dodawany jeśli support ma conajmniej wartość progową
-            sequences << seq if seq.support >= treshold
+            sequences << seq #if seq.support >= treshold
           end
         }
         
@@ -114,13 +122,13 @@ module TextMining
         found = []
         indexes_step = Array.new(@ngrams_sets.length - 1, 0)
         @sequences.each { |seq|
-          seq.each_index { |el_index|
-            el_variant = seq[el_index].length - 1
+          seq.elements.each_index { |el_index|
+            el_variant = seq.elements[el_index].symbols.length - 1
 
             # TODO lepsze dobierania ngramu z tmp, może po poprawnej weryfikacji ustalić możliwe kroki dla każdej z długości
             ngrams = tmp_ngrams[el_variant]
             step_index = indexes_step[el_variant]
-            if seq[el_index] != ngrams[step_index]
+            if seq.elements[el_index] != ngrams[step_index]
               break
             end
 

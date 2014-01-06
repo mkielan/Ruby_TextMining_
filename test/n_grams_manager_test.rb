@@ -5,6 +5,7 @@ require_relative '../test/test_text_mining_helper'
 include TextMining
 
 class NGramsManagerTest < Test::Unit::TestCase
+  prepare_test_results_dir NGramsManagerTest
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
@@ -39,6 +40,12 @@ class NGramsManagerTest < Test::Unit::TestCase
   def test_reduce
     puts 'Search sequences'
     @manager.find_sequences
+
+    @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/sequences.txt'
+    seqs = ''
+    @manager.sequences.each {|s| seqs += (s.to_write + "\n")}
+
+    @dest.write seqs
 
     puts 'Seqrch sequences for document'
     sequences = @manager.find_sequences_for @first_doc
