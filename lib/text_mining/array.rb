@@ -46,23 +46,21 @@ class Array
   #
   def order_containing array
     if array.is_a? Array
-      if array.length > 0 and self.length > 0 and array.length <= self.length
-        i = 0
+      if array.length > 0 and self.length > 0 and  array.length <= self.length
 
-        last_good = self.length - array.length
-
-        #ustalenie pierwszego wspólnego elementu
-        until array[0] == self[i] or i == last_good or i >= self.length do
-          i += 1
-        end
-
-        if i <= last_good or array.length == 1
-          (0..array.length - 1).each { |e|
-            return false if array[e] != self[e + i]
+        self.length.times { |i|
+          last = nil
+          start = i
+          array.length.times { |j|
+            if start >= self.length or self[start] != array[j]
+              break
+            end
+            last = j + 1
+            start += 1
           }
 
-          return true
-        end
+          return true if last == array.length
+        }
       end
     else
       raise ArgumentError, 'Excepted Array class object!'

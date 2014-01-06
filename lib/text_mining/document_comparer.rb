@@ -33,9 +33,20 @@ module TextMining
     #może by tak wykonać jakąś nie skończonąlistę parametrów
     # albo przyjąć że będzie tablica dokumentów do porównania
     # porównywanie dokonywane będzie na podstawie uzyskanych sekwencji
-    def compare doc, doc2
-      #TODO
-      false
+
+    #
+    # If return 0 then documents not similary
+    #
+    def compare doc1, doc2
+      d1 = @n_grams_manager.find_sequences_for doc1
+      d2 = @n_grams_manager.find_sequences_for doc2
+
+      if !(d1.empty? or d2.empty?) #if documents sequences found
+
+        #TODO
+      end
+
+      0
     end
   end
 end

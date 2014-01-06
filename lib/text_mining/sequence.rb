@@ -9,34 +9,33 @@ module TextMining
     
     def initialize first = nil
       @elements = []
-      @supports = []
       @support = 0
       
       add_to_front first if !first.nil?
     end
     
-    def add ngram, support = 0
-      if length == 0 or starts_from ngram
-        add_to_front ngram, support
-      elsif ends_at ngram
-        add_to_end ngram, support
-      else
-        false
+    def add ngram
+      if ngram.is_a? NGram
+        if length == 0 or starts_from ngram
+          add_to_front ngram
+          return true
+        elsif ends_at ngram
+          add_to_end ngram
+          return true
+        end
       end
-      
-      true
+
+      false
     end
     
-    def add_to_front element, support = 0
+    def add_to_front element
       @elements.unshift element
-      @supports.unshift support
 
       support_recount
     end
     
-    def add_to_end element, support = 0
+    def add_to_end element
       @elements << element
-      @supports << support
 
       support_recount
     end
@@ -54,23 +53,23 @@ module TextMining
         end
       end
 
+      self_elements = []
+      @elements.each { |e| self_elements << e.symbols }
+
       if other.is_a? Sequence
-        return @elements.order_containing other.elements
-      else other.is_a? Array
-        if !other[0].is_a? Array
-          other = [other]
+        return self_elements.order_containing other.elements
+      elsif other.is_a? NGram
+        return self_elements.order_containing [other.symbols]
+      elsif other.is_a? Array
+        if other[0].is_a? NGram
+          arr = []
+          other.each { |a| arr << a.symbols.dup }
+
+          return self_elements.order_containing arr
         end
-        return @elements.order_containing other  
       end
       
       false
-    end
-    
-    #
-    # Returns elements of sequence without repeats components of elements
-    #
-    def without_reps
-      #TODO
     end
     
     def starts_from ngram
@@ -95,7 +94,10 @@ module TextMining
     # Based on elements support.
     #
     def support_recount
-      @support = @supports.sum.to_f / @supports.length.to_f
+      sum = 0
+      @elements.each { |i| sum += i.freq}
+
+      @support = sum.to_f / length.to_f
     end
     
     #
@@ -103,11 +105,11 @@ module TextMining
     #
     def extremity ngram, which = :begin
       if which == :begin
-        seq_ngram_element = @elements.first
-        other = ngram
+        seq_ngram_element = @elements.first.symbols
+        other = ngram.symbols
       else
-        seq_ngram_element = @elements.last.reverse
-        other = ngram.reverse
+        seq_ngram_element = @elements.last.symbols.reverse
+        other = ngram.symbols.reverse
       end
 
       return false if @elements.length == 0

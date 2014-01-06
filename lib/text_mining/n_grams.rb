@@ -66,7 +66,7 @@ module TextMining
       nil
     end
 
-    def self.split_ngram doc, regex, dimension
+    def self.split_ngram doc, dimension, regex = / /
       doc.downcase.gsub(/[\s]+/, ' ').split(regex).each_cons(dimension).to_a
     end
 
@@ -77,7 +77,7 @@ module TextMining
     def single_add doc, cardinality
       @documents_count += 1
 
-      NGrams.split_ngram(doc, @regex, @dimension).each { |s|
+      NGrams.split_ngram(doc, @dimension, @regex).each { |s|
         index = find s
 
         if index.nil?

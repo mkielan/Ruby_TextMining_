@@ -9,8 +9,16 @@ class SequenceTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @bigrams = [['test', 'one'], ['one', 'two'], ['two', 'tree'], ['tree', 'test']]
+    @bigrams = [
+        NGram.new(['test', 'one']),
+        NGram.new(['one', 'two']),
+        NGram.new(['two', 'tree']),
+        NGram.new(['tree', 'test'])
+    ]
+
     @bigrams_support = [0.45, 0.50, 0.80, 0.78]
+
+    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i]}
   end
 
   def test_add
@@ -65,7 +73,7 @@ class SequenceTest < Test::Unit::TestCase
 
     sum = 0
     @bigrams.length.times { |i|
-      seq.add_to_front @bigrams[i], @bigrams_support[i]
+      seq.add_to_front @bigrams[i]
       sum += @bigrams_support[i]
 
       assert_equal seq.support, sum / (i + 1)

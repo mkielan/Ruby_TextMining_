@@ -85,7 +85,6 @@ module TextMining
         if not partition[1].empty?
           partition = text.partition %r{^[a-zA-Z]{,3}?[ ]?[/]?[ ]?[a-zA-Z]{,3}}
 
-
           if partition[1].is_unit?
 
             ts = partition[0] + @unit_rgx.gsub('x', number.to_s)
