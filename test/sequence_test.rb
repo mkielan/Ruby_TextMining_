@@ -149,7 +149,7 @@ class SequenceTest < Test::Unit::TestCase
     @bigrams = [
         NGram.new(['test', 'one']),
         NGram.new(['one', 'two']),
-        NGram.new(['two', 'one', 'tree']),
+        NGram.new(['test', 'one', 'two']),
         NGram.new(['tree', 'test'])
     ]
 

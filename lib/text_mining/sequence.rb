@@ -34,13 +34,13 @@ module TextMining
 
     def add_to_front element
       @elements.unshift element
-
+      unique_elements!
       support_recount
     end
 
     def add_to_end element
       @elements << element
-
+      unique_elements!
       support_recount
     end
 
