@@ -37,7 +37,10 @@ class NGramsManagerTest < Test::Unit::TestCase
   end
 
   def test_reduce
+    puts 'Search sequences'
     @manager.find_sequences
+
+    puts 'Seqrch sequences for document'
     sequences = @manager.find_sequences_for @first_doc
     puts sequences.to_s
     puts 'Finish'

@@ -104,27 +104,37 @@ module TextMining
     # Check if sequence start or finish with components of entrance n-gram.
     #
     def extremity ngram, which = :begin
+      return false if @elements.length == 0
+
       if which == :begin
-        seq_ngram_element = @elements.first.symbols
-        other = ngram.symbols
+        other = @elements.first.symbols
+        element = ngram.symbols
       else
-        seq_ngram_element = @elements.last.symbols.reverse
-        other = ngram.symbols.reverse
+        element = @elements.last.symbols
+        other = ngram.symbols
       end
 
-      return false if @elements.length == 0
-      return false if seq_ngram_element == other
+      return false if element == other
 
       if other.is_a? Array
-        other.length.times { |i|
-          if other[i] == seq_ngram_element[0]
-            (i + 1..other.length - 1).each { |j|
-              return false if seq_ngram_element[j - i - 1] == other[j]
-            }
+        last_element = nil
 
-            return true
+        #ustalenie ostatniego wspólnego
+        (0..element.length - 1).reverse_each { |i|
+          if other.first == element[i]
+            last_element = i
+            break
           end
         }
+
+        if !last_element.nil?
+          #idx = element.length - last_element- 1
+          (last_element..element.length - 1).each { |i|
+            return false if other[i - last_element] != element[i]
+          }
+
+          return true
+        end
       end
 
       false

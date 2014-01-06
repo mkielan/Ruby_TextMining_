@@ -140,4 +140,31 @@ class SequenceTest < Test::Unit::TestCase
       assert_equal seq.length, 3
     }
   end
+
+  def test_alt_add
+    @bigrams = [
+        NGram.new(['test', 'one']),
+        NGram.new(['one', 'two']),
+        NGram.new(['test', 'one','two']),
+        NGram.new(['tree', 'test'])
+    ]
+
+    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i]}
+
+    seq = Sequence.new
+    2.times { |i|
+      seq.add @bigrams[i]
+      assert_equal seq.length, i + 1
+      assert_equal seq.elements[i], @bigrams[i]
+    }
+
+    seq.add @bigrams[2]
+    assert_equal seq.length, 2
+    assert_equal seq.elements[1], @bigrams[1]
+
+    seq.add @bigrams[3]
+    assert_equal seq.length, 3
+    assert_equal seq.elements[1], @bigrams[1]
+
+  end
 end
