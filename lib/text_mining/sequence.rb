@@ -1,5 +1,5 @@
 module TextMining
-  
+
   #
   # Sequence of the elements (ngrams) with support recount.
   #
@@ -10,14 +10,14 @@ module TextMining
     public
     attr_reader :elements
     attr_reader :support
-    
+
     def initialize first = nil
       @elements = []
       @support = 0
-      
+
       add_to_front first if !first.nil?
     end
-    
+
     def add ngram
       if ngram.is_a? NGram
         if length == 0 or starts_from ngram
@@ -31,19 +31,19 @@ module TextMining
 
       false
     end
-    
+
     def add_to_front element
       @elements.unshift element
 
       support_recount
     end
-    
+
     def add_to_end element
       @elements << element
 
       support_recount
     end
-    
+
     #
     # Return <b>true</b> if sequence contain other sequence,
     # else <b>false</b>.
@@ -72,22 +72,22 @@ module TextMining
           return self_elements.order_containing arr
         end
       end
-      
+
       false
     end
-    
+
     def starts_from ngram
       extremity ngram, :begin
     end
-    
+
     def ends_at ngram
       extremity ngram, :end
     end
-    
+
     def to_s
       @elements.to_s
     end
-    
+
     def length
       @elements.length
     end
@@ -95,7 +95,7 @@ module TextMining
     def expanded_support ngram
       if ngram.is_a? NGram
         sum = ngram.freq
-        @elements.each { |i| sum += i.freq}
+        @elements.each { |i| sum += i.freq }
 
         @support = sum.to_f / (length + 1).to_f
       else
@@ -119,8 +119,35 @@ module TextMining
       a = '['
       @elements.each { |e| a += e.symbols.to_s }
       a += ']'
+    end
 
-      a
+    def unique_elements
+      ret = @elements.clone
+
+      i = 0
+      while i <= (ret.length - 1) do
+        if i > 0
+          if ret[i - 1].symbols.order_containing ret[i].symbols
+            ret.delete_at i
+            next
+          end
+        end
+
+        if i < ret.length - 1
+          if ret[i + 1].symbols.order_containing ret[i].symbols
+            ret.delete_at i
+            next
+          end
+        end
+
+        i += 1
+      end
+
+      ret
+    end
+
+    def unique_elements!
+      @elements = unique_elements
     end
 
     private
@@ -131,11 +158,11 @@ module TextMining
     #
     def support_recount
       sum = 0
-      @elements.each { |i| sum += i.freq}
+      @elements.each { |i| sum += i.freq }
 
       @support = sum.to_f / length.to_f
     end
-    
+
     #
     # Check if sequence start or finish with components of entrance n-gram.
     #
@@ -169,7 +196,6 @@ module TextMining
         }
 
         if !last_element.nil?
-
           (last_element..element.length - 1).each { |i|
             return false if other[i - last_element] != element[i]
           }

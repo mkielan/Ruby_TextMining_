@@ -18,7 +18,7 @@ class SequenceTest < Test::Unit::TestCase
 
     @bigrams_support = [0.45, 0.50, 0.80, 0.78]
 
-    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i]}
+    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i] }
   end
 
   def test_add
@@ -149,11 +149,11 @@ class SequenceTest < Test::Unit::TestCase
     @bigrams = [
         NGram.new(['test', 'one']),
         NGram.new(['one', 'two']),
-        NGram.new(['test', 'one','two']),
+        NGram.new(['two', 'one', 'tree']),
         NGram.new(['tree', 'test'])
     ]
 
-    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i]}
+    @bigrams.length.times { |i| @bigrams[i].freq = @bigrams_support[i] }
 
     seq = Sequence.new
     2.times { |i|
@@ -170,5 +170,32 @@ class SequenceTest < Test::Unit::TestCase
     assert_equal seq.length, 3
     assert_equal seq.elements[1], @bigrams[0]
 
+  end
+
+  def test_unique_elements
+    seq = Sequence.new
+
+    @ngrams = [
+        NGram.new(['test', 'one']),
+        NGram.new(['test', 'one', 'two']),
+        NGram.new(['one', 'two']),
+        NGram.new(['tree', 'test'])
+    ]
+
+    @ngrams.length.times { |i| seq.add @ngrams[i] }
+
+    u = seq.unique_elements
+    assert_equal u.length, 2
+    assert_equal seq.clone.unique_elements!.length, 2
+
+    seq.add NGram.new(['two', 'adin'])
+    u = seq.unique_elements
+    assert_equal u.length, 3
+    assert_equal seq.clone.unique_elements!.length, 3
+
+    seq.add NGram.new(['two', 'adin', 'dwa'])
+    u = seq.unique_elements
+    assert_equal u.length, 3
+    assert_equal seq.clone.unique_elements!.length, 3
   end
 end
