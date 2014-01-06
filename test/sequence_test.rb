@@ -83,20 +83,22 @@ class SequenceTest < Test::Unit::TestCase
   def test_starts_from
     seq = Sequence.new
 
-    (0..@bigrams.length - 2).each { |i|
+    a = 1
+    (1..@bigrams.length - 2).reverse_each { |i|
       seq.add_to_front @bigrams[i]
 
-      assert_equal seq.starts_from(@bigrams[i]), true
-      assert_equal seq.length, i + 1
+      assert_equal seq.starts_from(@bigrams[i - 1]), true
+      assert_equal seq.length, a
+      a += 1
     }
 
     seq = Sequence.new
 
-    (0..@bigrams.length - 2).each { |i|
+    (1..@bigrams.length - 2).each { |i|
       seq.add_to_end @bigrams[i]
 
       assert_equal seq.starts_from(@bigrams[0]), true
-      assert_equal seq.length, i + 1
+      assert_equal seq.length, i
     }
   end
 
@@ -106,17 +108,19 @@ class SequenceTest < Test::Unit::TestCase
     (0..@bigrams.length - 2).each { |i|
       seq.add_to_end @bigrams[i]
 
-      assert_equal seq.ends_at(@bigrams[i]), true
+      assert_equal seq.ends_at(@bigrams[i + 1]), true
       assert_equal seq.length, i + 1
     }
 
     seq = Sequence.new
 
-    (0..@bigrams.length - 2).each { |i|
+    a = 1
+    (0..@bigrams.length - 2).reverse_each { |i|
       seq.add_to_front @bigrams[i]
 
-      assert_equal seq.ends_at(@bigrams[0]), true
-      assert_equal seq.length, i + 1
+      assert_equal seq.ends_at(@bigrams[@bigrams.length - 1]), true
+      assert_equal seq.length, a
+      a += 1
     }
   end
 
@@ -125,11 +129,15 @@ class SequenceTest < Test::Unit::TestCase
 
     seq.add_to_front @bigrams[0]
     assert_equal seq.length, 1
+    seq.add @bigrams[0]
+    assert_equal seq.length, 1
 
     seq.add_to_end @bigrams[1]
     assert_equal seq.length, 2
 
-    seq.add @bigrams[2]
-    assert_equal seq.length, 3
+    2.times {
+      seq.add @bigrams[2]
+      assert_equal seq.length, 3
+    }
   end
 end

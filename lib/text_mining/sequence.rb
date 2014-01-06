@@ -113,7 +113,7 @@ module TextMining
       end
 
       return false if @elements.length == 0
-      return true if seq_ngram_element == other
+      return false if seq_ngram_element == other
 
       if other.is_a? Array
         other.length.times { |i|
