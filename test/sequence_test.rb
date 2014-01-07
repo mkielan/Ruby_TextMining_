@@ -172,7 +172,7 @@ class SequenceTest < Test::Unit::TestCase
 
   end
 
-  def test_unique_elements
+  def test_unique_ngrams
     seq = Sequence.new
 
     @ngrams = [
@@ -184,18 +184,41 @@ class SequenceTest < Test::Unit::TestCase
 
     @ngrams.length.times { |i| seq.add @ngrams[i] }
 
-    u = seq.unique_elements
+    u = seq.unique_ngrams
     assert_equal u.length, 2
-    assert_equal seq.clone.unique_elements!.length, 2
+    assert_equal seq.clone.unique_ngrams!.length, 2
 
     seq.add NGram.new(['two', 'adin'])
-    u = seq.unique_elements
+    u = seq.unique_ngrams
     assert_equal u.length, 3
-    assert_equal seq.clone.unique_elements!.length, 3
+    assert_equal seq.clone.unique_ngrams!.length, 3
 
     seq.add NGram.new(['two', 'adin', 'dwa'])
-    u = seq.unique_elements
+    u = seq.unique_ngrams
     assert_equal u.length, 3
-    assert_equal seq.clone.unique_elements!.length, 3
+    assert_equal seq.clone.unique_ngrams!.length, 3
+  end
+
+  def test_unique_elements
+    seq = Sequence.new
+
+    @bigrams.length.times { |i| seq.add @bigrams[i] }
+
+    assert_equal seq.unique_elements, ['tree','test', 'one', 'two','tree']
+
+    text = ['Ala', 'ma', 'kota', 'kot', 'ma', 'Ale']
+    seq = Sequence.new
+    seq.add NGram.new(['Ala', 'ma', 'kota'])
+    seq.add NGram.new(['ma', 'kota', 'kot'])
+    seq.add NGram.new(['kot', 'ma', 'Ale'])
+
+    assert_equal seq.unique_elements, text
+
+    seq = Sequence.new
+    seq.add NGram.new(['Ala', 'ma', 'kota'])
+    seq.add NGram.new(['kota', 'kot'])
+    seq.add NGram.new(['kot', 'ma', 'Ale'])
+
+    assert_equal seq.unique_elements, text
   end
 end

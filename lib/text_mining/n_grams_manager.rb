@@ -104,41 +104,84 @@ module TextMining
     #
     def find_sequences_for document
       if document.is_a? Document
-        tmp_ngrams = []
+        tmp_sets_ngrams = []
 
-        (0..@ngrams_sets.length - 1).each { |i|
-          tmp = NGrams.split_ngram(document.tr_body, i + 1)
-
+        (1..@ngrams_sets.length - 1).each { |i|
+          tmp = NGrams.split_to_ngrams(document.tr_body, i + 1)
+          #puts tmp.to_s
           #reduction absent in the top ngrams
-          i = 0
-          while i < tmp.length - 1 do
-            tmp.delete_at i if !@top_ngrams.include?(tmp[i])
+          k = 0
+          while k < tmp.length - 1 do
+            if NGramsManager.include_ngrams? @top_ngrams, tmp[k]
+              k += 1
+            else
+              tmp.delete_at k
+            end
           end
 
-          tmp_ngrams << tmp
+          tmp_sets_ngrams << tmp
         }
 
-        # search sequences for document
+        # search sequences for document,
+        # because we deleted items not in top,
+        # so we can't use one level n-gram.
         found = []
-        indexes_step = Array.new(@ngrams_sets.length - 1, 0)
-        @sequences.each { |seq|
-          seq.elements.each_index { |el_index|
-            el_variant = seq.elements[el_index].symbols.length - 1
+        uni_idx = 0 # index of unigram
+        unigram = NGrams.split_to_ngrams(document.tr_body, 1) #tmp_sets_ngrams[0]
 
-            # TODO lepsze dobierania ngramu z tmp, może po poprawnej weryfikacji ustalić możliwe kroki dla każdej z długości
-            ngrams = tmp_ngrams[el_variant]
-            step_index = indexes_step[el_variant]
-            if seq.elements[el_index] != ngrams[step_index]
-              break
+        range = 0..tmp_sets_ngrams.length - 1
+        while ngrams_are(tmp_sets_ngrams[1, tmp_sets_ngrams.length - 1]) and uni_idx < tmp_sets_ngrams[0].length do
+          sequence = Sequence.new
+          sequence_build_finish = false
+
+          while !sequence_build_finish and uni_idx < tmp_sets_ngrams[0].length do
+            tmp = nil
+
+            range.each { |set_id|
+              next if tmp_sets_ngrams[set_id].length == 0
+
+              if sequence.length == 0
+                puts "compare #{tmp_sets_ngrams[set_id][0].symbols[0]} with #{unigram[uni_idx].symbols[0]}"
+                if tmp_sets_ngrams[set_id][0].symbols[0] == unigram[uni_idx].symbols[0]
+                  tmp = tmp_sets_ngrams[set_id][0]
+                  tmp_sets_ngrams[set_id].delete_at 0
+                end
+              else
+                puts "if #{sequence} with #{tmp_sets_ngrams[set_id][0]}"
+                if sequence.ends_at tmp_sets_ngrams[set_id][0]
+                  tmp = tmp_sets_ngrams[set_id][0]
+                  tmp_sets_ngrams[set_id].delete_at 0
+                end
+              end
+            }
+
+            # usunięcie w zbiorach takich n-gamów, które zawierają się w sekwencji
+            # (do pierwszego niezawierającego się)
+            if sequence.length > 0
+              range.each { |set_id|
+                while tmp_sets_ngrams[set_id] != nil and sequence.ends_at tmp_sets_ngrams[set_id][0] do
+                  tmp_sets_ngrams[set_id].delete_at 0
+                end
+              }
             end
 
-            if el_index == seq.length - 1
-              found << seq
-            else #calculate next index step
-              indexes_step = NGramsManager.calcualte_next_step el_variant, indexes_step, tmp_ngrams
+            if !tmp.nil?
+              sequence.add tmp
+            else
+              if sequence.length == 0 # potem korekta, jeśli niepusta
+                uni_idx += 1
+              else
+                found << sequence
+
+                #ustawienie flagi, nic się nie doda do tej sekwencji
+                sequence_build_finish = true
+              end
             end
-          }
-        }
+          end
+
+          # korekta uni_idx
+          uni_idx += sequence.unique_ngrams.length - 1
+        end
 
         return found
       else
@@ -168,16 +211,24 @@ module TextMining
       @top_ngrams
     end
 
-    def self.calcualte_next_step el_variant, indexes_step, tmp_ngrams
-      @ngrams_sets.length.times { |i|
-        if i == el_variant
-          indexes_step[i] += 1
-        else
-          (indexes_step[i]..tmp_ngrams[i].length - 1).each {
+    def ngrams_are sets_ngrams
+      if sets_ngrams.is_a? Array
+        sum = 0
 
-          }
-        end
+        sets_ngrams.each { |ngrams| sum += ngrams.length }
+
+        return sum > 0
+      else
+        raise 'Array object excepted'
+      end
+    end
+
+    def self.include_ngrams? array_ngrams, ngram
+      array_ngrams.each { |a|
+        return true if a.symbols.compare ngram.symbols
       }
+
+      false
     end
   end
 end

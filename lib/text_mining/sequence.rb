@@ -34,13 +34,13 @@ module TextMining
 
     def add_to_front element
       @elements.unshift element
-      unique_elements!
+      unique_ngrams!
       support_recount
     end
 
     def add_to_end element
       @elements << element
-      unique_elements!
+      unique_ngrams!
       support_recount
     end
 
@@ -110,18 +110,13 @@ module TextMining
       seq
     end
 
-    def dup
-      #TODO
-      super.dup
-    end
-
     def to_write
       a = '['
       @elements.each { |e| a += e.symbols.to_s }
       a += ']'
     end
 
-    def unique_elements
+    def unique_ngrams
       ret = @elements.clone
 
       i = 0
@@ -146,8 +141,29 @@ module TextMining
       ret
     end
 
-    def unique_elements!
-      @elements = unique_elements
+    def unique_ngrams!
+      @elements = unique_ngrams
+    end
+
+    def unique_elements
+      tmp = @elements.clone
+
+      (0..tmp.length - 2).each { |i|
+        idx = 0
+        (0..tmp.length - 1).each { |j|
+
+          if tmp[i].symbols[j] == tmp[i + 1].symbols[0]
+            idx = tmp[i].symbols.length - j
+            break
+          end
+        }
+
+        idx.times { tmp[i + 1].symbols.delete_at 0 }
+      }
+
+      ret = []
+      tmp.length.times { |i| ret.concat tmp[i].symbols }
+      ret
     end
 
     private
@@ -167,7 +183,7 @@ module TextMining
     # Check if sequence start or finish with components of entrance n-gram.
     #
     def extremity ngram, which = :begin
-      return false if @elements.length == 0
+      return false if ngram.nil? or @elements.length == 0
 
       if which == :begin
         other = @elements.first.symbols

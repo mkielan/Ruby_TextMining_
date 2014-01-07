@@ -70,6 +70,16 @@ module TextMining
       doc.downcase.gsub(/[\s]+/, ' ').split(regex).each_cons(dimension).to_a
     end
 
+    def self.split_to_ngrams doc, dimension, regex = / /
+      tmp = self.split_ngram doc, dimension, regex
+
+      ret = []
+
+      tmp.length.times { |i| ret << NGram.new(tmp[i]) }
+
+      ret
+    end
+
     protected
     #
     # Add single document.
