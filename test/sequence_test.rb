@@ -221,4 +221,34 @@ class SequenceTest < Test::Unit::TestCase
 
     assert_equal seq.unique_elements, text
   end
+
+  def test_equal
+    sequences = []
+
+    2.times { sequences << Sequence.new }
+
+    2.times { |i|
+      @bigrams.length.times { |j|
+        sequences[i].add @bigrams[j]
+      }
+    }
+
+    result = sequences[0] == sequences[1]
+    assert_equal result, true
+    result = sequences[0] != sequences[1]
+    assert_equal result, false
+
+    seq = Sequence.new
+    seq.add NGram.new(['Ala', 'ma', 'kota'])
+
+    assert_equal (sequences[0] == seq), false
+    assert_equal (sequences[0] != seq), true
+
+    seq.add NGram.new(['ma', 'kota', 'kot'])
+    seq.add NGram.new(['kot', 'ma', 'Ale'])
+    seq.add NGram.new(['Ale', 'w', 'bale'])
+
+    assert_equal (sequences[0] == seq), false
+    assert_equal (sequences[0] != seq), true
+  end
 end

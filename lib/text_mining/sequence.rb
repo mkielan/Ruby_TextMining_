@@ -4,6 +4,8 @@ module TextMining
   # Sequence of the elements (ngrams) with support recount.
   #
   class Sequence
+    private
+    alias :supper_eql? eql?
     protected
     attr_writer :elements
 
@@ -49,7 +51,7 @@ module TextMining
     # else <b>false</b>.
     #
     def contain other
-      return true if self == other
+      return true if self.supper_eql? other
 
       if other.respond_to? :length
         if other.length == 0
@@ -164,6 +166,21 @@ module TextMining
       ret = []
       tmp.length.times { |i| ret.concat tmp[i].symbols }
       ret
+    end
+
+    def ==(y)
+      return false if !y.is_a? Sequence
+      return false if self.length != y.length
+
+      self.length.times { |i|
+        return false if self.elements[i] != y.elements[i]
+      }
+
+      true
+    end
+
+    def !=(y)
+      not (self == y)
     end
 
     private

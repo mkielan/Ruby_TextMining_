@@ -38,12 +38,24 @@ module TextMining
     # If return 0 then documents not similary
     #
     def compare doc1, doc2
-      d1 = @n_grams_manager.find_sequences_for doc1
-      d2 = @n_grams_manager.find_sequences_for doc2
+      document_sequences = []
+      document_sequences << @n_grams_manager.find_sequences_for(doc1)
+      document_sequences << @n_grams_manager.find_sequences_for(doc2)
 
-      if !(d1.empty? or d2.empty?) #if documents sequences found
+      if !(document_sequences[0].empty? or document_sequences[1].empty?) #if documents sequences found
+        model_sequences = []
+        document_sequences.length.times { |i|
+          model_sequences << @n_grams_manager.find_model_sequence(document_sequences[i])
+        }
 
-        #TODO
+        i = 0
+        document_sequences[0].each { |a|
+          document_sequences[1].each { |b|
+            i += 1 if a == b
+          }
+        }
+
+        (i * 2).to_f / (document_sequences[0].length + document_sequences[1].length).to_f
       end
 
       0

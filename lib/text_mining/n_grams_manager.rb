@@ -189,6 +189,24 @@ module TextMining
       end
     end
 
+    def find_model_sequence sequences
+      to_processing = (sequences.is_a? Sequence) ? [sequences] : sequences
+
+      if to_processing.is_a? Array
+        found = []
+
+        to_processing.each { |p|
+          @sequences.each { |ms|
+            found << ms if ms.elements.compare p.elements
+          }
+        }
+
+        return found
+      else
+        raise 'Excepted array'
+      end
+    end
+
     private
     #
     # Find tops ngrams. With reduce ngrams when longer contain shorter

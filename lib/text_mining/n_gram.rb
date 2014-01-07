@@ -10,5 +10,16 @@ module TextMining
       @freq = 0
       @symbol_card = 0
     end
+
+    def ==(y)
+      return false if !y.is_a? NGram
+      return false if self.symbols.length != y.symbols.length
+
+      return self.symbols.compare y.symbols
+    end
+
+    def !=(y)
+      not (self == y)
+    end
   end
 end
