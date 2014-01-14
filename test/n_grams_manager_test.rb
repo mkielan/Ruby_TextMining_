@@ -39,18 +39,29 @@ class NGramsManagerTest < Test::Unit::TestCase
   end
 
   def test_reduce
-    @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/sequences.txt'
+    @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/model_sequences.txt'
     seqs = ''
-    @manager.sequences.each {|s| seqs += (s.to_write + "\n")}
-
+    @manager.sequences.each {|s| seqs += ("#{s.to_write}, #{s.support } \n")}
     @dest.write seqs
 
     puts 'Seqrch sequences for document'
     sequences = @manager.find_sequences_for @first_doc
     puts "document sequences: #{sequences}"
+    @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/document_sequences.txt'
+    seqs = "secuences for document: #{@first_doc.body}\n"
+    seqs += "transform body: #{@first_doc.tr_body}\n"
+    sequences.each {|s| seqs += "#{s.to_write}\n"}
+    @dest.write seqs
 
     model_sequences = @manager.find_model_sequence sequences
     puts "model sequences: #{model_sequences}"
+
+    @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/model_sequences_in_document.txt'
+    seqs = "model secuences in document: #{@first_doc.body}\n"
+    seqs += "transform body: #{@first_doc.tr_body}\n"
+    model_sequences.each {|s| seqs += "#{s.to_write}\n"}
+    @dest.write seqs
+
     puts 'Finish'
   end
 end

@@ -16,8 +16,8 @@ module TextMining::Attachments
           tmp = '          '
 
           # write header
-          (0..value.symbols.length - 1).each { |i|
-            tmp += "%#{5 + value.symbols[i].to_s.length}s" % value.symbols[i].to_s
+          (0..value.length - 1).each { |i|
+            tmp += "%#{5 + value[i].to_s.length}s" % value[i].to_s
           }
           file.write(tmp + "\n")
 
@@ -26,7 +26,7 @@ module TextMining::Attachments
 
             cardinality = value.cardinalities[r]
             (0..cardinality.length - 1).each { |c|
-              length = 5 + value.symbols[c].to_s.length
+              length = 5 + value[c].to_s.length
               tmp += "%#{length}s" % cardinality[c].to_s
             }
 

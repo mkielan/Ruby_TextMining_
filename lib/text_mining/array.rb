@@ -45,6 +45,8 @@ class Array
   # Check if self contain other array with order
   #
   def order_containing array
+    return false if array.nil?
+
     if array.is_a? Array
       if array.length > 0 and self.length > 0 and  array.length <= self.length
 

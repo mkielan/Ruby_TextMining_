@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'test/unit'
 
 require '../test/test_text_mining_helper'
@@ -31,20 +33,54 @@ class NGramsTest < Test::Unit::TestCase
   end
 
   def test_general
-    @dest = FileDestination.new $test_results_dir + '/top1.txt'
-    @dest.write @unigrams.top
+    ngrams_sets = [@unigrams, @bigrams, @trigrams]
 
-    @dest = FileDestination.new $test_results_dir + '/top2.txt'
-    @dest.write @bigrams.top
-
-    @dest = FileDestination.new $test_results_dir + '/top3.txt'
-    @dest.write @trigrams.top
+    print_results ngrams_sets
 
 
     puts 'reduce test'
+    @unigrams.reduce_containing! @bigrams
+    @bigrams.reduce_containing! @trigrams
+
+    print_results ngrams_sets, 'reduce'
+
     @dest = FileDestination.new $test_results_dir + '/top2_after_reduce_with3.txt'
 
-    @bigrams.reduce_containing! @trigrams
+
     @dest.write @bigrams.top
+  end
+
+  def print_results ngrams_sets, text = ''
+    ngrams_sets.each_index { |i|
+      @dest = FileDestination.new $test_results_dir + "/#{i + 1}-gram_#{text}.txt"
+      @dest.write ngrams_sets[i]
+
+      @dest = FileDestination.new $test_results_dir + "/top_#{i + 1}-gram_#{text}.txt"
+      @dest.write ngrams_sets[i].top
+
+      TextMining::Helpers::ChartDisplay.display(
+          prepare_series(ngrams_sets[i]),
+          "Częstości #{i + 1}-gramów w modelu",
+          "#{i + 1}-gramy",
+          'częstość',
+          $test_results_dir + "/#{i + 1}-gram_#{text}_chart.png")
+
+      TextMining::Helpers::ChartDisplay.display(
+          prepare_series(ngrams_sets[i].top),
+          "Częstości #{i + 1}-gramów w modelu",
+          "#{i + 1}-gramy",
+          'częstość',
+          $test_results_dir + "/top_#{i + 1}-gram_#{text}_chart.png")
+    }
+  end
+
+  def prepare_series hash
+    ret_hash = Hash.new
+
+    hash.keys { |key|
+      ret_hash[key] = hash[key]
+    }
+
+    ret_hash
   end
 end

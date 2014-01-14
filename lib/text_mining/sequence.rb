@@ -183,6 +183,37 @@ module TextMining
       not (self == y)
     end
 
+    #
+    # Return value between 0 and 1 after compare two sequence
+    #
+    def compare other
+      if other.is_a? Sequence
+        good = 0
+
+        self_unique = self.unique_elements
+        other_unique = other.unique_elements
+
+        i = s = o = 0
+        while s < self_unique.length and o < other_unique.length
+          if self_unique[s] == other_unique[o]
+            good += 1
+            s += 1
+            o += 1
+          else
+            if i % 2 == 0
+              s += 1
+            else
+              o += 1
+            end
+          end
+        end
+
+        return (2 * good).to_f / (self_unique.length + other_unique.length).to_f
+      end
+
+      0
+    end
+
     private
 
     #

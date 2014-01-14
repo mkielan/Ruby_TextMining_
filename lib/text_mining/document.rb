@@ -11,7 +11,7 @@ module TextMining
     attr_reader :parts
 
     def initialize body
-      @body = body
+      @body = body.nil? ? String.new : body
       @num_rgx = ' <num/> ' #' <num(x)/> '
       @date_rgx = ' <date/> '
       @unit_rgx = ' <unit/> ' #' <unit(x)/> '
@@ -22,6 +22,8 @@ module TextMining
     protected
 
     def transform
+      @tr_body = @body.clone
+      @tr_body.remove_punctuation!
       find_dates
       find_numbers_units
 
@@ -110,7 +112,7 @@ module TextMining
     def find array, replace, rgx
       buf = ''
       number = 0
-      text = @body
+      text = @tr_body
 
       while !text.nil? and !text.empty?
         partition = text.partition rgx

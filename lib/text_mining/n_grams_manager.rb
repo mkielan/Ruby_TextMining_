@@ -11,7 +11,7 @@ module TextMining
     attr_reader :sequences
     attr_accessor :auto_find_sequence
 
-    def initialize n = 4, options = {regex: / /}
+    def initialize n = 4, options = { regex: / / }
       @ngrams_sets = []
       @options = options
       @top_ngrams = []
@@ -108,7 +108,7 @@ module TextMining
 
         (1..@ngrams_sets.length - 1).each { |i|
           tmp = NGrams.split_to_ngrams(document.tr_body, i + 1)
-          #puts tmp.to_s
+
           #reduction absent in the top ngrams
           k = 0
           while k < tmp.length - 1 do
@@ -127,27 +127,25 @@ module TextMining
         # so we can't use one level n-gram.
         found = []
         uni_idx = 0 # index of unigram
-        unigram = NGrams.split_to_ngrams(document.tr_body, 1) #tmp_sets_ngrams[0]
+        unigrams = NGrams.split_to_ngrams(document.tr_body, 1) #tmp_sets_ngrams[0]
 
         range = 0..tmp_sets_ngrams.length - 1
         while ngrams_are(tmp_sets_ngrams[1, tmp_sets_ngrams.length - 1]) and uni_idx < tmp_sets_ngrams[0].length do
           sequence = Sequence.new
           sequence_build_finish = false
 
-          while !sequence_build_finish and uni_idx < tmp_sets_ngrams[0].length do
+          while !sequence_build_finish and uni_idx < unigrams.length do
             tmp = nil
 
             range.each { |set_id|
               next if tmp_sets_ngrams[set_id].length == 0
 
               if sequence.length == 0
-                puts "compare #{tmp_sets_ngrams[set_id][0].symbols[0]} with #{unigram[uni_idx].symbols[0]}"
-                if tmp_sets_ngrams[set_id][0].symbols[0] == unigram[uni_idx].symbols[0]
+                if tmp_sets_ngrams[set_id][0].symbols[0] == unigrams[uni_idx].symbols[0]
                   tmp = tmp_sets_ngrams[set_id][0]
                   tmp_sets_ngrams[set_id].delete_at 0
                 end
               else
-                puts "if #{sequence} with #{tmp_sets_ngrams[set_id][0]}"
                 if sequence.ends_at tmp_sets_ngrams[set_id][0]
                   tmp = tmp_sets_ngrams[set_id][0]
                   tmp_sets_ngrams[set_id].delete_at 0
@@ -159,9 +157,12 @@ module TextMining
             # (do pierwszego niezawierającego się)
             if sequence.length > 0
               range.each { |set_id|
-                while tmp_sets_ngrams[set_id] != nil and sequence.ends_at tmp_sets_ngrams[set_id][0] do
+                while sequence.unique_elements.order_containing tmp_sets_ngrams[set_id][0].symbols
                   tmp_sets_ngrams[set_id].delete_at 0
                 end
+                #while tmp_sets_ngrams[set_id] != nil and sequence.ends_at tmp_sets_ngrams[set_id][0] do
+                #  tmp_sets_ngrams[set_id].delete_at 0
+                #end
               }
             end
 
@@ -205,6 +206,10 @@ module TextMining
       else
         raise 'Excepted array'
       end
+    end
+
+    def vector_n_grams_for document
+
     end
 
     private

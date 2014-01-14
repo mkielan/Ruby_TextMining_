@@ -51,14 +51,18 @@ module TextMining
         i = 0
         document_sequences[0].each { |a|
           document_sequences[1].each { |b|
-            i += 1 if a == b
+            i += a.compare b #1 if a == b
           }
         }
 
-        (i * 2).to_f / (document_sequences[0].length + document_sequences[1].length).to_f
+        return (i * 2).to_f / (document_sequences[0].length + document_sequences[1].length).to_f
       end
 
       0
+    end
+
+    def cos_compare doc1, doc2
+
     end
   end
 end

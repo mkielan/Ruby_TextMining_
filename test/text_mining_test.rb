@@ -9,19 +9,14 @@ class TextMiningTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @source = Attachments::SheetSource.new '../data/EKG_opis.ods'
-    @ngram_lrn_src = Attachments::SheetSource.new '../data/EKG_ngrams_lrn.ods'
-    @text_mining = TextMining.new @source, @source
-  end
+    @mongo_client = MongoClient.new
+    @collection = @mongo_client.db('text_mining').collection('documents')
+    @source = Attachments::MongoSource.new @collection, :body
 
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
-    # Do nothing
+    @text_mining = TextMining::TextMining.new @source
   end
 
   def test_base
-    @text_mining.run
+    puts @text_mining.n_grams_manager.sequences.length
   end
 end

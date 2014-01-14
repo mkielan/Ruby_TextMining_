@@ -30,7 +30,6 @@ class NGramTest < Test::Unit::TestCase
     @bigrams.length.times { |i|
       @bigrams.length.times { |j|
         result = @bigrams[i] == @bigrams[j]
-        puts "#{@bigrams[i]} and #{@bigrams[j]} = #{result}"
 
         if i != j
           assert_equal result, false

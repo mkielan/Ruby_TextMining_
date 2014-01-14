@@ -21,5 +21,9 @@ module TextMining
     def !=(y)
       not (self == y)
     end
+
+    def to_s
+      super + @symbols.to_s
+    end
   end
 end

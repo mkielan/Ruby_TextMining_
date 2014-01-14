@@ -146,7 +146,6 @@ module TextMining
 
                 if ngrams[j].freq >= self[i].freq - deflection \
                   and ngrams[j].freq <= self[i].freq + deflection
-                  puts "delete #{self[i].symbols} support(#{self[i].freq}), because in #{ngrams[j].symbols} support(#{ngrams[j].symbol_freqs}"
 
                   delete_at i
                   break if self.length == 0

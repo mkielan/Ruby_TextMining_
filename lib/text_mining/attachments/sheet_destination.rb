@@ -30,7 +30,9 @@ module TextMining::Attachments
     end
 
     def write value, row = 0, col = 0
-      if value.is_a? Tools::NGram
+      switch_sheet if @sheet.nil?
+
+      if value.is_a? NGram
         # write header
         save
         (0..value.symbols.length - 1).each { |i|
@@ -46,8 +48,9 @@ module TextMining::Attachments
             write(freq[c], r + row + 1, c + col + 1)
           }
           save
-          puts r
         }
+      elsif value.is_a?(Fixnum) or value.is_a?(Bignum) or value.is_a?(Float)
+        @sheet[row, col] = value
       else
         @sheet[row, col] = value.to_s
       end

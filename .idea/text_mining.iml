@@ -15,10 +15,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="bson (v1.9.2, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v1.3.5, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="gruff (v0.5.1, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="levenshtein-jruby (v0.1.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mini_portile (v0.5.2, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="mongo (v1.9.2, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="nokogiri (v1.6.1, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rake (v10.1.0, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rinruby (v2.0.3, RVM: jruby-1.7.8 [tm]) [gem]" level="application" />
