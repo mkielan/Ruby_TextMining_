@@ -2,52 +2,45 @@ require 'test/unit'
 
 require '../test_text_mining_helper'
 
-include TextMining::Tools
+include TextMining
 include TextMining::Attachments
 
 class SheetDestinationTest < Test::Unit::TestCase
+  prepare_test_results_dir SheetDestinationTest
+
+  @@how_many_in_test = 200
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
     @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
-    @dest = SheetDestination.new '../../data/dest.ods'
+    @dest = SheetDestination.new $test_results_dir + '/dest.ods'
 
-    @unigrams = NGram.new 1
-    @bigrams = NGram.new 2
-    @trigrams = NGram.new 3
+    @ngrams_set = []
+    3.times { |i| @ngrams_set << NGrams.new(i + 1) }
 
     doc = 1
-    while row = @source.next[0].remove_punctuation!
-      puts 'DocumentID: ' + doc.to_s + '/' + @source.count.to_s
+    while row = @source.next[0]
+      if !row.nil?
+        row.remove_punctuation!
 
-      doc += 1
-      @unigrams.add row
-      @bigrams.add row
-      @trigrams.add row
+        puts 'DocumentID: ' + doc.to_s + '/' + @source.count.to_s
 
-      return if doc > 200
+        doc += 1
+
+        @ngrams_set.each { |ngrams| ngrams.add(row) }
+      end
+
+      return if doc > @@how_many_in_test
     end
   end
 
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
-    # Do nothing
-  end
-
   def test_write_ngram
-    @dest.switch_sheet(name = 'unigram')
-    puts 'Save Unigram'
-    @dest.write(@unigrams)
-
-    @dest.switch_sheet(name = 'digram')
-    puts 'Save Digram'
-    @dest.write(@bigrams)
-
-    @dest.switch_sheet(name = 'trigram')
-    puts 'Save Trigram'
-    @dest.write(@trigrams)
+    3.times { |i|
+      @dest.switch_sheet(name = "#{i + 1}-grams")
+      puts "Save #{i + 1}-grams"
+      @dest.write(@ngrams_set[i])
+      @dest.save
+    }
   end
 end

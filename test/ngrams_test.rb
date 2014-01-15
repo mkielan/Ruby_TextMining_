@@ -39,7 +39,6 @@ class NGramsTest < Test::Unit::TestCase
 
     print_results ngrams_sets
 
-
     puts 'reduce test'
     @unigrams.reduce_containing! @bigrams
     @bigrams.reduce_containing! @trigrams
@@ -47,8 +46,6 @@ class NGramsTest < Test::Unit::TestCase
     print_results ngrams_sets, 'reduce'
 
     @dest = FileDestination.new $test_results_dir + '/top2_after_reduce_with3.txt'
-
-
     @dest.write @bigrams.top
   end
 

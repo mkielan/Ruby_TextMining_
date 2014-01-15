@@ -2,7 +2,7 @@ require 'mongo'
 
 include Mongo
 
-module TextMining::Attachments
+module TextMining::Helpers
   class SheetToMongoCollection
 
     def self.do sheet_source, collection, attribute_keys

@@ -1,22 +1,25 @@
 require 'test/unit'
 require '../test_text_mining_helper'
 
-include TextMining::Tools
+include TextMining
 include TextMining::Attachments
 
 class FileDestinationTest < Test::Unit::TestCase
+  prepare_test_results_dir FileDestinationTest
+
+  @@how_many_in_test = 100
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
     @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
-    @dest_u = FileDestination.new 'unigram.txt'
-    @dest_d = FileDestination.new 'digram.txt'
-    @dest_t = FileDestination.new 'trigram.txt'
+    @dest_u = FileDestination.new $test_results_dir + '/unigram.txt'
+    @dest_d = FileDestination.new $test_results_dir + '/digram.txt'
+    @dest_t = FileDestination.new $test_results_dir + '/trigram.txt'
 
-    @unigrams = NGram.new 1
-    @bigrams = NGram.new 2
-    @trigrams = NGram.new 3
+    @unigrams = NGrams.new 1
+    @bigrams = NGrams.new 2
+    @trigrams = NGrams.new 3
 
     doc = 1
     while row = @source.next[0]
@@ -29,36 +32,23 @@ class FileDestinationTest < Test::Unit::TestCase
       @bigrams.add document
       @trigrams.add document
 
-      #@unigram.add document.body
-      #@digram.add document.body
-      #@trigram.add document.body
-
-      return if doc > 100
+      break if doc > @@how_many_in_test
     end
   end
 
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
-    # Do nothing
-  end
-
   def test_write_ngram
-    puts 'Save Unigram'
+    puts 'Save Unigrams'
     @dest_u.write @unigrams
-    ChartDisplay.display @unigrams.symbol_freqs, 'unigramy', 'n-gramy', 'częstość'
+    #ChartDisplay.display @unigrams.symbol_freqs, 'unigramy', 'n-gramy', 'częstość'
 
-    puts 'Save Digram'
+    puts 'Save Digrams'
     @dest_d.write @bigrams
-    ChartDisplay.display @bigrams.symbol_freqs, 'digramy', 'n-gramy', 'częstość'
+    #ChartDisplay.display @bigrams.symbol_freqs, 'digramy', 'n-gramy', 'częstość'
 
-    puts 'Save Trigram'
+    puts 'Save Trigrams'
     @dest_t.write @trigrams
-    ChartDisplay.display @trigrams.symbol_freqs, 'trigramy', 'n-gramy', 'częstość'
+    #ChartDisplay.display @trigrams.symbol_freqs, 'trigramy', 'n-gramy', 'częstość'
 
     puts 'Finish'
-
-    STDIN.readline
   end
 end

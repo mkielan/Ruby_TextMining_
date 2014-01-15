@@ -5,11 +5,10 @@ require_relative '../test/test_text_mining_helper'
 include TextMining
 
 class DocumentComparerTest < Test::Unit::TestCase
-
+  @@how_many_in_test = 500
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @doc_count = 500
     @compare_count = 100
 
     prepare_test_results_dir DocumentComparerTest
@@ -39,7 +38,7 @@ class DocumentComparerTest < Test::Unit::TestCase
       @manager.add document
 
       doc_id += 1
-      break if doc_id > @doc_count
+      break if doc_id > @@how_many_in_test = 200
     end
 
     @manager.find_sequences
@@ -73,6 +72,5 @@ class DocumentComparerTest < Test::Unit::TestCase
     }
 
     @dest.save
-
   end
 end

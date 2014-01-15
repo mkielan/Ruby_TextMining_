@@ -7,6 +7,8 @@ include TextMining
 class NGramsManagerTest < Test::Unit::TestCase
   prepare_test_results_dir NGramsManagerTest
 
+  @@how_main_in_test = 100
+
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
@@ -25,7 +27,7 @@ class NGramsManagerTest < Test::Unit::TestCase
       @manager.add document
 
       doc_id += 1
-      break if doc_id > 20
+      break if doc_id > @@how_main_in_test
     end
 
     puts 'Search sequences'
@@ -47,6 +49,7 @@ class NGramsManagerTest < Test::Unit::TestCase
     puts 'Seqrch sequences for document'
     sequences = @manager.find_sequences_for @first_doc
     puts "document sequences: #{sequences}"
+
     @dest = TextMining::Attachments::FileDestination.new $test_results_dir + '/document_sequences.txt'
     seqs = "secuences for document: #{@first_doc.body}\n"
     seqs += "transform body: #{@first_doc.tr_body}\n"

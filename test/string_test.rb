@@ -4,19 +4,11 @@ require 'test/unit'
 require 'date'
 require_relative '../test/test_text_mining_helper'
 
-
 class StringTest < Test::Unit::TestCase
 
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    # Do nothing
-  end
-
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
     # Do nothing
   end
 
@@ -78,7 +70,6 @@ class StringTest < Test::Unit::TestCase
   end
 
   def test_remove_punctuation
-    #todo to corect
 =begin
     assert_equal 'a-a'.remove_punctuation, 'a-a'
     assert_equal 'a- a'.remove_punctuation, 'a- a'

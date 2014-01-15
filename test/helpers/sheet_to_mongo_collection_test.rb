@@ -2,7 +2,9 @@ require 'test/unit'
 require '../test_text_mining_helper'
 require 'mongo'
 
+include TextMining::Helpers
 include TextMining::Attachments
+
 class SheetToMongoCollectionTest < Test::Unit::TestCase
 
   # Called before every test method runs. Can be used

@@ -16,7 +16,6 @@ require 'text_mining/attachments/sheet_source'
 require 'text_mining/attachments/mongo_source'
 require 'text_mining/attachments/sheet_destination'
 require 'text_mining/attachments/file_destination'
-require 'text_mining/attachments/sheet_to_mongo_collection'
 
 # Gui
 require 'text_mining/gui/main'
@@ -24,11 +23,11 @@ require 'text_mining/gui/document_view'
 require 'text_mining/gui/models/document_model'
 require 'text_mining/gui/models/document_list_model'
 
-# Tools
+# Helpers
 require 'text_mining/helpers/chart_display'
+require 'text_mining/helpers/sheet_to_mongo_collection'
 
 module TextMining
-  #include Tools
 
   class TextMining
     attr_reader :n_gram_manager

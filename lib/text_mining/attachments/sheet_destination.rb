@@ -33,29 +33,23 @@ module TextMining::Attachments
       switch_sheet if @sheet.nil?
 
       if value.is_a? NGram
-        # write header
-        save
-        (0..value.symbols.length - 1).each { |i|
-          write(value.symbols[i].to_s, row, i + 1)
-        }
+        write value.symbols, row, col
+        write value.freq, row, col + 1
+        write value.symbol_card, row, col + 2
+      elsif value.is_a? NGrams
+        @current_row = row
+        write 'N-gram', row, col
+        write 'Freq', row, col + 1
+        write 'Symbol cardinality', row, col + 2
 
-        # write values
-        (0..value.cardinalities.length - 1).each { |r|
-          write 'doc' + (r + 1).to_s, r + 1, col
-
-          freq = value.cardinalities[r]
-          (0..freq.length - 1).each { |c|
-            write(freq[c], r + row + 1, c + col + 1)
-          }
-          save
+        value.each { |ngram|
+          write_next ngram
         }
       elsif value.is_a?(Fixnum) or value.is_a?(Bignum) or value.is_a?(Float)
         @sheet[row, col] = value
       else
         @sheet[row, col] = value.to_s
       end
-
-      save
     end
 
     def write_next value

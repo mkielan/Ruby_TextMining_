@@ -7,7 +7,8 @@ $start_test_time = Time.new
 
 def prepare_test_results_dir title = nil
   dirs = []
-  $test_results_dir = './test_results'
+
+  $test_results_dir = "#{File.dirname(__FILE__)}/test_results"
   dirs << $test_results_dir
 
   $test_results_dir += "/#{$start_test_time.strftime('%Y-%m-%d')}"
