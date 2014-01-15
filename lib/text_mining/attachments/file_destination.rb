@@ -13,23 +13,10 @@ module TextMining::Attachments
     def write value
       File.open(@path, 'w') do |file|
         if value.is_a? TextMining::NGrams
-          tmp = '          '
-
+          file.write("NGram\tFreq\tsymbol cardinality\n")
           # write header
           (0..value.length - 1).each { |i|
-            tmp += "%#{5 + value[i].to_s.length}s" % value[i].to_s
-          }
-          file.write(tmp + "\n")
-
-          (0..value.cardinalities.length - 1).each { |r|
-            tmp = '%7s' % ('doc' + (r + 1).to_s)
-
-            cardinality = value.cardinalities[r]
-            (0..cardinality.length - 1).each { |c|
-              length = 5 + value[c].to_s.length
-              tmp += "%#{length}s" % cardinality[c].to_s
-            }
-
+            tmp = "#{value[i].symbols}\t#{value[i].freq}\t#{value[i].symbol_card}"
             file.write(tmp + "\n")
           }
         elsif value.is_a? TextMining::Freqs

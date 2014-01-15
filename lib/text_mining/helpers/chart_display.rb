@@ -11,17 +11,19 @@ module TextMining::Helpers
 
       g = Gruff::Line.new
       g.theme = {
-          :colors => %w(black grey),
+          :colors => %w(blue black),
           :marker_color => 'grey',
           :font_color => 'black',
           :background_colors => 'white'
       }
       g.title = title
+      g.hide_legend = true
+      #g.hide_lines = true
+      #g.marker_font_size = 20
 
       series.keys.each { |key|
         g.data key, series[key]
       }
-
 
       hash_labels = Hash.new
       if !labels.nil?
@@ -29,17 +31,18 @@ module TextMining::Helpers
           hash_labels[i] = labels[i]
         }
       else
-        if series.length < 10
+        l = series[series.keys[0]].length
+        if l < 10
           delta = 1
-        elsif series.length < 100
+        elsif l < 100
           delta = 20
-        elsif series.length < 500
+        elsif l < 500
           delta = 50
         else
           delta = 100
         end
 
-        series[series.keys[0]].length.times { |i|
+        l.times { |i|
           hash_labels[i] = i % delta == 0 ? i.to_s : ''
         }
       end

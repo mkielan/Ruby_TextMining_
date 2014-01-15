@@ -18,15 +18,17 @@ class NGramsTest < Test::Unit::TestCase
     @src = SheetSource.new '../data/EKG_opis.ods', header = 1
 
     doc = 1
-    while row = @src.next[0].remove_punctuation!
+    while row = @src.next[0]
       puts 'DocumentID: ' + doc.to_s + '/' + @src.count.to_s
 
       doc += 1
-      document = Document.new row
+      if row.is_a? String
+        document = Document.new row.remove_punctuation!
 
-      @unigrams.add document
-      @bigrams.add document
-      @trigrams.add document
+        @unigrams.add document
+        @bigrams.add document
+        @trigrams.add document
+      end
 
       return if doc > 100
     end
@@ -55,11 +57,14 @@ class NGramsTest < Test::Unit::TestCase
       @dest = FileDestination.new $test_results_dir + "/#{i + 1}-gram_#{text}.txt"
       @dest.write ngrams_sets[i]
 
+      @dest = FileDestination.new $test_results_dir + "/#{i + 1}-gram_sorted_#{text}.txt"
+      @dest.write ngrams_sets[i].freqs
+
       @dest = FileDestination.new $test_results_dir + "/top_#{i + 1}-gram_#{text}.txt"
       @dest.write ngrams_sets[i].top
 
       TextMining::Helpers::ChartDisplay.display(
-          prepare_series(ngrams_sets[i]),
+          prepare_series(ngrams_sets[i].freqs),
           "Częstości #{i + 1}-gramów w modelu",
           "#{i + 1}-gramy",
           'częstość',
@@ -74,13 +79,15 @@ class NGramsTest < Test::Unit::TestCase
     }
   end
 
-  def prepare_series hash
-    ret_hash = Hash.new
+  def prepare_series freqs
+    ret = []
 
-    hash.keys { |key|
-      ret_hash[key] = hash[key]
+    freqs.each { |f|
+      ret << f[:freq]
     }
 
+    ret_hash = Hash.new
+    ret_hash['n-grams'] = ret
     ret_hash
   end
 end

@@ -59,7 +59,7 @@ module TextMining
       count = self.length
 
       if count > 0
-        part_width = (count.to_f / 3.0).to_int
+        part_width = (count.to_f / 5.0).to_int
         return freqs[0..part_width]
       end
 
@@ -163,5 +163,7 @@ module TextMining
 
       nil
     end
+
+
   end
 end
