@@ -1,6 +1,6 @@
 require 'test/unit'
 
-require_relative '../test/test_text_mining_helper'
+require_relative '../../test/test_text_mining_helper'
 
 include TextMining
 

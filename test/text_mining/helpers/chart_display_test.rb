@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../test_text_mining_helper'
+require '../../test_text_mining_helper'
 
 class ChartDisplayTest < Test::Unit::TestCase
   prepare_test_results_dir ChartDisplayTest

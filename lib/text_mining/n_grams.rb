@@ -130,7 +130,7 @@ module TextMining
       nil
     end
 
-    #tu przydałby się MapReduce
+    #
     # Reduce symbols containing in input Ngram
     #
     def reduce_containing! ngrams, deflection = 0.01
@@ -163,7 +163,5 @@ module TextMining
 
       nil
     end
-
-
   end
 end

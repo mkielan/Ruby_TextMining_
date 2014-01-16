@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../test_text_mining_helper'
+require '../../test_text_mining_helper'
 require 'mongo'
 
 include TextMining::Helpers
@@ -10,7 +10,7 @@ class SheetToMongoCollectionTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @source = SheetSource.new '../../../data/EKG_opis.ods', header = 1
 
     @attr = [:body, :describe]
 

@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../test_text_mining_helper'
+require '../../test_text_mining_helper'
 
 include TextMining
 include TextMining::Attachments
@@ -12,7 +12,7 @@ class FileDestinationTest < Test::Unit::TestCase
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @source = SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @source = SheetSource.new '../../../data/EKG_opis.ods', header = 1
     @dest_u = FileDestination.new $test_results_dir + '/unigram.txt'
     @dest_d = FileDestination.new $test_results_dir + '/digram.txt'
     @dest_t = FileDestination.new $test_results_dir + '/trigram.txt'

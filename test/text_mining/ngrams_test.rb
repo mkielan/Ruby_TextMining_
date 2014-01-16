@@ -2,7 +2,7 @@
 
 require 'test/unit'
 
-require '../test/test_text_mining_helper'
+require '../../test/test_text_mining_helper'
 
 include TextMining
 include TextMining::Attachments
@@ -15,7 +15,7 @@ class NGramsTest < Test::Unit::TestCase
     @bigrams = NGrams.new 2
     @trigrams = NGrams.new 3
 
-    @src = SheetSource.new '../data/EKG_opis.ods', header = 1
+    @src = SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc = 1
     while row = @src.next[0]

@@ -1,6 +1,6 @@
 require 'test/unit'
 
-require_relative '../test/test_text_mining_helper'
+require_relative '../../test/test_text_mining_helper'
 
 include TextMining
 
@@ -18,7 +18,7 @@ class DocumentComparerTest < Test::Unit::TestCase
     @comparer = DocumentComparer.new @manager
 
     @manager.auto_find_sequence = false
-    @src = Attachments::SheetSource.new '../data/EKG_opis.ods', header = 1
+    @src = Attachments::SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc_id = 1
     while doc = @src.next[0]
@@ -40,8 +40,6 @@ class DocumentComparerTest < Test::Unit::TestCase
       doc_id += 1
       break if doc_id > @@how_many_in_test = 200
     end
-
-    @manager.find_sequences
   end
 
   # Fake test

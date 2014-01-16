@@ -1,5 +1,5 @@
 require 'test/unit'
-require '../test_text_mining_helper'
+require '../../test_text_mining_helper'
 
 include TextMining::Attachments
 
@@ -18,7 +18,6 @@ class MongoSourceTest < Test::Unit::TestCase
     end
   end
 
-  # Fake test
   def test_fail
 
   end

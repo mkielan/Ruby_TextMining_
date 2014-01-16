@@ -2,7 +2,7 @@
 
 require 'test/unit'
 require 'date'
-require_relative '../test/test_text_mining_helper'
+require_relative '../../test/test_text_mining_helper'
 
 class StringTest < Test::Unit::TestCase
 
