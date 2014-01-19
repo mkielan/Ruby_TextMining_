@@ -30,37 +30,31 @@ module TextMining
       @ngrams_sets.each { |ngrams|
         ngrams.add doc
       }
+
+      find_tops
+
       true
     end
 
     def vector_n_grams_for document
       # prepare to generate vector
-      ngrams_vector = []
+      ngrams_vector = Array.new(@top_ngrams.length, 0)
 
       # generate vector
       @ngrams_sets.length.times { |i|
         tmp = NGrams.split_to_ngrams(document.tr_body, i + 1)
-        ngrams_vector << Array.new(@ngrams_sets[i].length, 0)
 
         #reduction absent in the top ngrams
-        k = 0
-        while k < tmp.length - 1 do
-          if NGramsManager.include_ngrams? @top_ngrams, tmp[k]
-            k += 1
-          else
-            tmp.delete_at k
-          end
-        end
 
-        tmp.each { |ngram|
-          index = @ngrams_sets.find_index ngram
-          ngrams_vector[index] += 1
+        tmp.length.times { |k|
+          index = @top_ngrams.find_index tmp[k]
+          if !index.nil?
+            ngrams_vector[index] += 1
+          end
         }
       }
 
-      vector = []
-      ngrams_vector.each { |e| vector.concat(e) }
-      vector
+      ngrams_vector
     end
 
     private
@@ -74,14 +68,15 @@ module TextMining
       @top_ngrams = []
       temp = []
 
-      @ngrams_sets.length.times { |i| temp << @ngrams_sets[i].dup }
+      @ngrams_sets.length.times { |i| temp << @ngrams_sets[i].top.ngrams }
 
-      (1..temp.length - 2).each { |i|
-        temp[i].reduce_containing!(temp[i + 1])
+      temp.length.times.each { |i|
+        #temp[i].reduce_containing!(temp[i + 1])
 
         @top_ngrams.concat @ngrams_sets[i]
       }
 
+      #@top_ngrams.concat @ngrams_sets[0]
       @top_ngrams
     end
 

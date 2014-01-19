@@ -3,7 +3,7 @@ require 'spreadsheet'
 
 require_relative '../n_grams'
 
-module TextMining::Attachments
+module TextMining::IO
   class SheetDestination
     attr_accessor :sheet
 

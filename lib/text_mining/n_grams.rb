@@ -6,11 +6,13 @@ module TextMining
   class NGrams < Array
     attr_reader :dimension      # length of n-grams
     attr_reader :documents_count
+    attr_accessor :use_levenshtein
 
     def initialize n, regex = / /
       @dimension = n
       @regex = regex
       @documents_count = 0
+      @use_levenshtein = true
     end
 
     #
@@ -119,9 +121,14 @@ module TextMining
     def find element
       if element.is_a?(Array) && (element.length == @dimension) && self.length > 0
         (0..(self.length - 1)).each { |i|
-          begin
-            return i if element.cmp_levenshtein(self[i].symbols) == true
-          rescue
+
+          if @use_levenshtein
+            begin
+              return i if element.cmp_levenshtein(self[i].symbols) == true
+            rescue
+              return i if element.compare(self[i].symbols) == true
+            end
+          else
             return i if element.compare(self[i].symbols) == true
           end
         }

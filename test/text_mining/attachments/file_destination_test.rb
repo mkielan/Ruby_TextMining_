@@ -2,7 +2,7 @@ require 'test/unit'
 require '../../test_text_mining_helper'
 
 include TextMining
-include TextMining::Attachments
+include TextMining::IO
 
 class FileDestinationTest < Test::Unit::TestCase
   prepare_test_results_dir FileDestinationTest

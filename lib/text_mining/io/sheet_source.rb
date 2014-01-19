@@ -1,7 +1,7 @@
 require 'roo'
 
 module TextMining
-  module Attachments
+  module IO
 
     #
     # Sheet Source to test

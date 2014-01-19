@@ -3,7 +3,7 @@ require '../../test_text_mining_helper'
 require 'mongo'
 
 include TextMining::Helpers
-include TextMining::Attachments
+include TextMining::Helpers
 
 class SheetToMongoCollectionTest < Test::Unit::TestCase
 

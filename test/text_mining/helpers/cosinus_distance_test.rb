@@ -5,7 +5,6 @@ include TextMining::Helpers
 
 class CosinusDistanceTest < Test::Unit::TestCase
 
-
   def test_compare
     puts CosinusDistance.similarity([1,2,3], [1,2,0])
     assert_equal CosinusDistance.similarity([1,2,3], [1,2,3]), 1

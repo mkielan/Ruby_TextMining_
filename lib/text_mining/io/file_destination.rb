@@ -1,6 +1,6 @@
 require_relative '../n_grams'
 
-module TextMining::Attachments
+module TextMining::IO
 
   # Helper to save data to file.
   class FileDestination

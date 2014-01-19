@@ -11,7 +11,7 @@ class TextMiningTest < Test::Unit::TestCase
   def setup
     @mongo_client = MongoClient.new
     @collection = @mongo_client.db('text_mining').collection('documents')
-    @source = Attachments::MongoSource.new @collection, :body
+    @source = IO::MongoSource.new @collection, :body
 
     @text_mining = TextMining::TextMining.new @source
   end

@@ -34,5 +34,11 @@ module TextMining
         raise 'Excepted float value'
       end
     end
+
+    def ngrams
+      ret = []
+      self.each { |e| ret << e[:symbol] }
+      ret
+    end
   end
 end

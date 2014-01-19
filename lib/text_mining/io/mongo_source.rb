@@ -2,7 +2,7 @@ require 'mongo'
 
 include Mongo
 
-module TextMining::Attachments
+module TextMining::IO
   class MongoSource
 
     def initialize collection, body_attr

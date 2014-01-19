@@ -3,8 +3,7 @@ require '../../test_text_mining_helper'
 
 class ChartDisplayTest < Test::Unit::TestCase
   prepare_test_results_dir ChartDisplayTest
-  # Called before every test method runs. Can be used
-  # to set up fixture information.
+
   def setup
     @out_filename = $test_results_dir + '/out.png'
     @test_hash = { :Seria => [1, 2, 3, 4, 5] }

@@ -9,7 +9,7 @@ module TextMining::Helpers
         return
       end
 
-      g = Gruff::Line.new
+      g = Gruff::Line.new('700x400')
       g.theme = {
           :colors => %w(blue black),
           :marker_color => 'grey',
@@ -18,6 +18,8 @@ module TextMining::Helpers
       }
       g.title = title
       g.hide_legend = true
+      g.x_axis_label = x_label
+      g.y_axis_label = y_label
       #g.hide_lines = true
       #g.marker_font_size = 20
 

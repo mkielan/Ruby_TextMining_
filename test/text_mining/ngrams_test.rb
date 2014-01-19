@@ -5,15 +5,35 @@ require 'test/unit'
 require '../../test/test_text_mining_helper'
 
 include TextMining
-include TextMining::Attachments
+include TextMining::IO
 
 class NGramsTest < Test::Unit::TestCase
-  prepare_test_results_dir NGramsTest
 
   def setup
-    @unigrams = NGrams.new 1
-    @bigrams = NGrams.new 2
-    @trigrams = NGrams.new 3
+
+  end
+
+  def test_with_levenshten
+    prepare_test_results_dir(NGramsTest.to_s + ' with Levenshtein')
+    prepare true
+
+    self.do
+  end
+
+  def test_without_levenshtein
+    prepare_test_results_dir(NGramsTest.to_s + ' without Levenshtein')
+    prepare false
+
+    self.do
+  end
+
+  def prepare levenshtein = true
+    @ngrams_sets = []
+    3.times { |i|
+      ngrams = NGrams.new(i+1)
+      ngrams.use_levenshtein = levenshtein
+      @ngrams_sets << ngrams
+    }
 
     @src = SheetSource.new '../../data/EKG_opis.ods', header = 1
 
@@ -25,28 +45,24 @@ class NGramsTest < Test::Unit::TestCase
       if row.is_a? String
         document = Document.new row.remove_punctuation!
 
-        @unigrams.add document
-        @bigrams.add document
-        @trigrams.add document
+        @ngrams_sets.each {|e| e.add document }
       end
 
       return if doc > 100
     end
   end
 
-  def test_general
-    ngrams_sets = [@unigrams, @bigrams, @trigrams]
-
-    print_results ngrams_sets
+  def do
+    print_results @ngrams_sets
 
     puts 'reduce test'
-    @unigrams.reduce_containing! @bigrams
-    @bigrams.reduce_containing! @trigrams
+    @ngrams_sets[0].reduce_containing! @ngrams_sets[1]
+    @ngrams_sets[1].reduce_containing! @ngrams_sets[2]
 
-    print_results ngrams_sets, 'reduce'
+    print_results @ngrams_sets, 'reduce'
 
     @dest = FileDestination.new $test_results_dir + '/top2_after_reduce_with3.txt'
-    @dest.write @bigrams.top
+    @dest.write @ngrams_sets[2].top
   end
 
   def print_results ngrams_sets, text = ''

@@ -9,6 +9,7 @@ module TextMining
     attr_reader :date_rgx
     attr_accessor :tr_body
     attr_reader :parts
+    attr_accessor :vector
 
     def initialize body
       @body = body.nil? ? String.new : body

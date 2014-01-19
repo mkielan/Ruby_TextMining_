@@ -13,22 +13,26 @@ require 'text_mining/n_gram'
 require 'text_mining/n_grams'
 require 'text_mining/n_grams_manager'
 
-# TextMining::Attachments
-require 'text_mining/attachments/sheet_source'
-require 'text_mining/attachments/mongo_source'
-require 'text_mining/attachments/sheet_destination'
-require 'text_mining/attachments/file_destination'
+# TextMining::IO
+require 'text_mining/IO/sheet_source'
+require 'text_mining/IO/mongo_source'
+require 'text_mining/IO/sheet_destination'
+require 'text_mining/IO/file_destination'
 
-# Gui
+# TextMining::Gui
 require 'text_mining/gui/main'
 require 'text_mining/gui/document_view'
 require 'text_mining/gui/models/document_model'
 require 'text_mining/gui/models/document_list_model'
 
-# Helpers
+# TextMining::Helpers
 require 'text_mining/helpers/chart_display'
 require 'text_mining/helpers/sheet_to_mongo_collection'
 require 'text_mining/helpers/cosinus_distance'
+require 'text_mining/helpers/distance'
+
+# TextMining::Grouping
+require 'text_mining/grouping/k_means'
 
 module TextMining
 

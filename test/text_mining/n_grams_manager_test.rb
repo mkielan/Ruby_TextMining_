@@ -15,7 +15,7 @@ class NGramsManagerTest < Test::Unit::TestCase
     prepare_test_results_dir NGramsManagerTest
 
     @manager = NGramsManager.new
-    @src = Attachments::SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @src = IO::SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc_id = 1
     while doc = @src.next[0].remove_punctuation!

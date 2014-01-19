@@ -1,7 +1,7 @@
 require 'test/unit'
 require '../../test_text_mining_helper'
 
-include TextMining::Attachments
+include TextMining::IO
 
 class MongoSourceTest < Test::Unit::TestCase
 

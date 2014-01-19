@@ -17,8 +17,7 @@ class DocumentComparerTest < Test::Unit::TestCase
     @manager = NGramsManager.new
     @comparer = DocumentComparer.new @manager
 
-    @manager.auto_find_sequence = false
-    @src = Attachments::SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @src = TextMining::IO::SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc_id = 1
     while doc = @src.next[0]
@@ -42,31 +41,29 @@ class DocumentComparerTest < Test::Unit::TestCase
     end
   end
 
-  # Fake test
-  def test_comapre
+  # compare and save table
+  def test_compare_many
     result = @comparer.compare @first_doc, @second_doc
 
     assert_equal result >= 0, true
     assert_equal result <= 1, true
-  end
 
-  # compare and save table
-  def test_compare_many
     results = Array.new(@documents.length) { Array.new(@documents.length, 0) }
 
-    @dest = TextMining::Attachments::SheetDestination.new $test_results_dir + "/loaded(#{@doc_count})_compare-documents(#{@compare_count}).ods"
+    @dest = TextMining::IO::SheetDestination.new $test_results_dir + "/loaded(#{@doc_count})_compare-documents(#{@compare_count}).ods"
 
     @documents.length.times { |i|
       @documents.length.times { |j|
         puts "comapre #{i} with #{j}" if j % 10 == 0
+
         results[i][j] = @comparer.compare @documents[i], @documents[j]
 
         @dest.write results[i][j], i, j
 
-        break if j >= @compare_count
+        break if j + 1 >= @compare_count
       }
 
-      break if i >= @compare_count
+      break if i + 1 >= @compare_count
     }
 
     @dest.save

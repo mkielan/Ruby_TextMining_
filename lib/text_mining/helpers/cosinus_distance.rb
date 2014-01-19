@@ -9,8 +9,8 @@ module TextMining::Helpers
       l = 0
       array1.length.times { |i| l += array1[i] * array2[i] }
       m = Math.sqrt(euclides(array1)) * Math.sqrt(euclides(array2))
-
-      l.to_f / m.to_f
+      return 0 if l == 0
+      (l.to_f / m.to_f).round 5
     end
 
     def self.distance array1, array2
