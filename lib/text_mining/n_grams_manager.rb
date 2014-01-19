@@ -66,17 +66,11 @@ module TextMining
       return if @ngrams_sets.length < 2
 
       @top_ngrams = []
-      temp = []
 
-      @ngrams_sets.length.times { |i| temp << @ngrams_sets[i].top.ngrams }
-
-      temp.length.times.each { |i|
-        #temp[i].reduce_containing!(temp[i + 1])
-
-        @top_ngrams.concat @ngrams_sets[i]
+      @ngrams_sets.length.times { |i|
+        @top_ngrams.concat @ngrams_sets[i].top.ngrams
       }
 
-      #@top_ngrams.concat @ngrams_sets[0]
       @top_ngrams
     end
 

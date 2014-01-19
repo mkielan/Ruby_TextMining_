@@ -37,7 +37,7 @@ module TextMining
 
     def ngrams
       ret = []
-      self.each { |e| ret << e[:symbol] }
+      self.each { |e| ret << NGram.new(e[:symbol]) }
       ret
     end
   end
