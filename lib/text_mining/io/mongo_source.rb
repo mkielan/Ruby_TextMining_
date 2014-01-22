@@ -7,7 +7,7 @@ module TextMining::IO
 
     def initialize collection, body_attr
       if !collection.is_a? Collection
-        raise ArgumentError, 'collection is not Collection Class Object'
+        raise ArgumentError, 'collection is not Mongo::Collection Class Object'
       end
 
       @collection = collection

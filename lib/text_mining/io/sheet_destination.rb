@@ -45,6 +45,10 @@ module TextMining::IO
         value.each { |ngram|
           write_next ngram
         }
+      elsif value.is_a? Array
+        value.each_index { |i|
+          write value[i], row, col + i
+        }
       elsif value.is_a?(Fixnum) or value.is_a?(Bignum) or value.is_a?(Float)
         @sheet[row, col] = value
       else
@@ -59,6 +63,34 @@ module TextMining::IO
 
     def save
       @book.write @path
+    end
+
+    def write_tdm docs
+      if docs.is_a? Array
+        if docs.length > 0
+          header = ['']
+          docs.first.vector.length.times { |i| header << "[#{i+1}]" }
+          write_next header
+
+          if docs.is_a? Array
+            i = 1
+            docs.each { |d|
+              if !d.vector.nil?
+                o = [i]
+                o.concat d.vector
+                write_next o
+                i += 1
+              end
+            }
+
+            save
+          else
+            raise ArrgumentError, 'docs is not Array class object'
+          end
+        end
+      else
+        raise ArgumentError 'docs is not Array class object'
+      end
     end
   end
 end

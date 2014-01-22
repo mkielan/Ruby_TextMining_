@@ -3,13 +3,14 @@ require 'test/unit'
 require_relative '../../test/test_text_mining_helper'
 
 include TextMining
+include TextMining::IO
 
 class DocumentComparerTest < Test::Unit::TestCase
-  @@how_many_in_test = 30
+  @@how_many_in_test = 250
   # Called before every test method runs. Can be used
   # to set up fixture information.
   def setup
-    @compare_count = 20
+    @compare_count = 200
 
     prepare_test_results_dir DocumentComparerTest
 
@@ -17,7 +18,7 @@ class DocumentComparerTest < Test::Unit::TestCase
     @manager = NGramsManager.new
     @comparer = DocumentComparer.new @manager
 
-    @src = TextMining::IO::SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @src = SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc_id = 1
     while doc_id < @src.count - 1 and doc_id < @@how_many_in_test
@@ -35,9 +36,7 @@ class DocumentComparerTest < Test::Unit::TestCase
         @documents << document
         @first_doc = document if doc_id == 1
         @second_doc = document if doc_id == 2
-        if doc_id == 998
-          puts 1
-        end
+
         @manager.add document
       rescue
       end
@@ -55,7 +54,7 @@ class DocumentComparerTest < Test::Unit::TestCase
 
     results = Array.new(@documents.length) { Array.new(@documents.length, 0) }
 
-    @dest = TextMining::IO::SheetDestination.new $test_results_dir + "/loaded(#{@doc_count})_compare-documents(#{@compare_count}).ods"
+    @dest = SheetDestination.new $test_results_dir + "/loaded(#{@doc_count})_compare-documents(#{@compare_count}).ods"
 
     @documents.length.times { |i|
       @documents.length.times { |j|
@@ -72,5 +71,7 @@ class DocumentComparerTest < Test::Unit::TestCase
     }
 
     @dest.save
+    dest = SheetDestination.new $test_results_dir + '/tdm.ods'
+    dest.write_tdm @documents
   end
 end
