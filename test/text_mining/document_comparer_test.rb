@@ -73,5 +73,47 @@ class DocumentComparerTest < Test::Unit::TestCase
     @dest.save
     dest = SheetDestination.new $test_results_dir + '/tdm.ods'
     dest.write_tdm @documents
+
+    #TODO wektor dla 7
+
+    g =[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+        3, 3, 3, 3]
+
+    rg = find_ngrams @documents, g, @manager.top_ngrams, 3   #TODO 3 na 7
+
+    rg.each_index { |i|
+      dest = FileDestination.new $test_results_dir + "/#{i}grams_sort.txt"
+      dest.write rg[i]
+    }
+  end
+
+  def find_ngrams docs, doc_in_groups, top_ngrams, groups_count
+    ret = Array.new(groups_count) { Array.new(top_ngrams.length, 0) }
+
+    docs.each_index { |d_index|
+      gr = doc_in_groups[d_index]
+      if !doc.nil? and !docs[d_index].vector.nil?
+        docs[d_index].vector.each_index { |v|
+          ret[gr][v] += docs[d_index].vector[v]
+        }
+      end
+    }
+
+    h = Array.new(groups_count) {Array.new}
+
+    ret.length.times { |i|
+      ret[i].length.times { |j|
+        h[i] << Hash[:symbol, top_ngrams[j],:freq, ret[i][j]]
+      }
+
+      h[i].sort! { |a, b| b[:freq] <=> a[:freq] }
+    }
+    h
   end
 end

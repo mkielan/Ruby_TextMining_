@@ -8,6 +8,7 @@ module TextMining
   class NGramsManager
     attr_accessor :options
     attr_reader :ngrams_sets
+    attr_reader :top_ngrams
 
     def initialize n = 4, options = { regex: / / }
       @ngrams_sets = []
