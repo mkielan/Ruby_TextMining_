@@ -35,20 +35,26 @@ class NGramsTest < Test::Unit::TestCase
       @ngrams_sets << ngrams
     }
 
-    @src = SheetSource.new '../../data/EKG_opis.ods', header = 1
+    @mongo_client = MongoClient.new
+    @collection = @mongo_client.db('text_mining').collection('documents')
+    @src = IO::MongoSource.new @collection, :body
+
+    #@src = SheetSource.new '../../data/EKG_opis.ods', header = 1
 
     doc = 1
-    while row = @src.next[0]
-      puts 'DocumentID: ' + doc.to_s + '/' + @src.count.to_s
+    while row = @src.next
+      if !row.nil?
+        puts 'DocumentID: ' + doc.to_s + '/' + @src.count.to_s
 
-      doc += 1
-      if row.is_a? String
-        document = Document.new row.remove_punctuation!
+        doc += 1
+        if row.is_a? String
+          document = Document.new row.remove_punctuation!
 
-        @ngrams_sets.each {|e| e.add document }
+          @ngrams_sets.each {|e| e.add document }
+        end
+
+        break if doc > 100
       end
-
-      return if doc > 100
     end
   end
 

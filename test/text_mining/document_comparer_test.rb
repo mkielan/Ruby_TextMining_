@@ -1,11 +1,11 @@
-require 'test/unit'
+#require 'test/unit'
 
 require_relative '../../test/test_text_mining_helper'
 
 include TextMining
 include TextMining::IO
 
-class DocumentComparerTest < Test::Unit::TestCase
+class DocumentComparerTest #< Test::Unit::TestCase
   @@how_many_in_test = 250
   # Called before every test method runs. Can be used
   # to set up fixture information.
@@ -18,12 +18,16 @@ class DocumentComparerTest < Test::Unit::TestCase
     @manager = NGramsManager.new
     @comparer = DocumentComparer.new @manager
 
-    @src = SheetSource.new '../../data/EKG_opis.ods', header = 1
+    #@src = SheetSource.new '../../data/EKG_opis.ods', header = 1
+
+    @mongo_client = MongoClient.new
+    @collection = @mongo_client.db('text_mining').collection('documents')
+    @src = IO::MongoSource.new @collection, :body
 
     doc_id = 1
     while doc_id < @src.count - 1 and doc_id < @@how_many_in_test
       begin
-        doc = @src.next[0]
+        doc = @src.next
         puts 'DocumentID: ' + doc_id.to_s + '/' + @src.count.to_s if doc_id % 10 == 0
 
         if doc.nil?
@@ -49,8 +53,8 @@ class DocumentComparerTest < Test::Unit::TestCase
   def test_compare_many
     result = @comparer.compare @first_doc, @second_doc
 
-    assert_equal result >= 0, true
-    assert_equal result <= 1, true
+    #assert_equal result >= 0, true
+    #assert_equal result <= 1, true
 
     results = Array.new(@documents.length) { Array.new(@documents.length, 0) }
 
@@ -74,23 +78,6 @@ class DocumentComparerTest < Test::Unit::TestCase
     dest = SheetDestination.new $test_results_dir + '/tdm.ods'
     dest.write_tdm @documents
 
-    #TODO wektor dla 7
-
-    g =[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-        3, 3, 3, 3]
-
-    rg = find_ngrams @documents, g, @manager.top_ngrams, 3   #TODO 3 na 7
-
-    rg.each_index { |i|
-      dest = FileDestination.new $test_results_dir + "/#{i}grams_sort.txt"
-      dest.write rg[i]
-    }
   end
 
   def find_ngrams docs, doc_in_groups, top_ngrams, groups_count
@@ -117,3 +104,8 @@ class DocumentComparerTest < Test::Unit::TestCase
     h
   end
 end
+
+
+d = DocumentComparerTest.new
+d.setup
+d.test_compare_many

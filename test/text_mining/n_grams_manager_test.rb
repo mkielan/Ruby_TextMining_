@@ -15,18 +15,26 @@ class NGramsManagerTest < Test::Unit::TestCase
     prepare_test_results_dir NGramsManagerTest
 
     @manager = NGramsManager.new
-    @src = IO::SheetSource.new '../../data/EKG_opis.ods', header = 1
+    #@src = IO::SheetSource.new '../../data/EKG_opis.ods', header = 1
+
+    @mongo_client = MongoClient.new
+    @collection = @mongo_client.db('text_mining').collection('documents')
+    @src = TextMining::IO::MongoSource.new @collection, :body
 
     doc_id = 1
-    while doc = @src.next[0].remove_punctuation!
-      puts 'DocumentID: ' + doc_id.to_s + '/' + @src.count.to_s
+    while doc = @src.next
+      if !doc.nil?
+        doc.remove_punctuation!
 
-      document = Document.new doc
-      @first_doc = document if doc_id == 1
-      @manager.add document
+        puts 'DocumentID: ' + doc_id.to_s + '/' + @src.count.to_s
 
-      doc_id += 1
-      break if doc_id > @@how_main_in_test
+        document = Document.new doc
+        @first_doc = document if doc_id == 1
+        @manager.add document
+
+        doc_id += 1
+        break if doc_id > @@how_main_in_test
+      end
     end
   end
 
